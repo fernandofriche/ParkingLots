@@ -1,0 +1,182 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Londrina+Solid:wght@100;300;400;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Londrina+Solid:wght@100;300;400;900&display=swap');
+
+.Cabecalho {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    height: 70px;
+    z-index: 99;
+    background-color: #277D8E;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    padding: 10px 0;
+    transition: background-color 0.3s ease;
+}
+
+.DivLista {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Cabecalho ul {
+    display: flex;
+    align-items: center;
+    gap: 190px;
+    list-style: none;
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    color: white;
+    padding: 0 2%;
+}
+
+.Cabecalho ul a {
+    text-decoration: none;
+    color: white;
+    transition: color 0.3s ease;
+}
+
+/* .Cabecalho ul a:hover {
+    color: #1E9E5E;
+} */
+
+.Cabecalho img.Logo {
+    width: 120px;
+    transition: transform 0.3s ease;
+}
+
+.UserIcon {
+    width: 50px;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.nome {
+    font-size: 40px;
+    color: black;
+    font-family: "Londrina Solid", sans-serif;
+    display: flex;
+    justify-content: center;
+    margin-top: 6%;
+}
+
+.modalButton {
+    margin: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.modalButton:hover {
+    background-color: #0056b3;
+}
+
+.modalBackground {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.updatePasswordContainer {
+    width: 400px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.passwordContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.passwordInput {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.passwordIcon {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+}
+
+.emailInput {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.attButton {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 14px;
+    top: 10px;
+    right: 10px;
+}
+
+.cancelButton {
+    top: 10px;
+    right: 10px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 14px;
+    margin-left: 2%;
+}
+
+.cancelButton:hover {
+    background-color: #c82333;
+}
+
+.actionButtons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+/* Estilo para o botão que abre o modal */
+.openModalButton {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 10px 20px;
+    font-size: 16px;
+    margin: 10px;
+}
+
+.openModalButton:hover {
+    background-color: #0056b3;
+}

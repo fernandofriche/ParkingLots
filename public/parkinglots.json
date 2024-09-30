@@ -1,0 +1,124 @@
+{
+  "parkingLots": [
+    {
+      "id": 1,
+      "name": "Rua Rio Grande do Norte, 1432 - Funcionários, Belo Horizonte, MG",
+      "description": "Localizado no bairro Funcionários, próximo a áreas comerciais e residenciais.",
+      "userRating": 4.5,
+      "hourlyRate": 25.00,
+      "image": "/src/assets/Cards/RioGrande.svg"
+    },
+    {
+      "id": 2,
+      "name": "Av. Luiz Paulo Franco, 500 - Belvedere, Belo Horizonte, MG",
+      "description": "Ao lado do BH2 Mall, ideal para quem faz compras e utiliza serviços no bairro Belvedere.",
+      "userRating": 4.7,
+      "hourlyRate": 5.00,
+      "image": "/src/assets/Cards/Shopping.svg"
+    },
+    {
+      "id": 3,
+      "name": "Rodovia LMG-800, Km 7 - Confins, Belo Horizonte, MG",
+      "description": "Convenientemente localizado ao lado do aeroporto, com serviço de traslado gratuito.",
+      "userRating": 4.2,
+      "hourlyRate": 20.00,
+      "image": "/src/assets/Cards/Aeroporto.svg"
+    },
+    {
+      "id": 4,
+      "name": "Av. Brasil, 1233 - Funcionários, Belo Horizonte, MG",
+      "description": "Perto da Praça da Liberdade, ótimo para quem deseja explorar o entorno cultural.",
+      "userRating": 4.8,
+      "hourlyRate": 10.00,
+      "image": "/src/assets/Cards/Praia.svg"
+    },
+    {
+      "id": 5,
+      "name": "Rua Rio Grande do Sul, 391 - Barro Preto, Belo Horizonte, MG",
+      "description": "Ao lado do hospital Mater Dei, ideal para quem precisa de fácil acesso.",
+      "userRating": 4.1,
+      "hourlyRate": 15.00,
+      "image": "/src/assets/Cards/Hospital.svg"
+    },
+    {
+      "id": 6,
+      "name": "Av. Antônio Abrahão Caram, 1001 - São José, Belo Horizonte, MG",
+      "description": "Localizado no estádio, ótimo para dias de jogos ou eventos.",
+      "userRating": 4.6,
+      "hourlyRate": 25.00,
+      "image": "/src/assets/Cards/Estadio.svg"
+    },
+    {
+      "id": 7,
+      "name": "Rua Cobre, 200 - Cruzeiro, Belo Horizonte, MG",
+      "description": "Estacionamento dedicado para estudantes e professores da FUMEC.",
+      "userRating": 4.3,
+      "hourlyRate": 18.00,
+      "image": "/src/assets/Cards/Universidade.svg"
+    },
+    {
+      "id": 8,
+      "name": "Rua São Paulo, 1043 - Centro, Belo Horizonte, MG",
+      "description": "Estacionamento acessível em uma área residencial e comercial.",
+      "userRating": 4.4,
+      "hourlyRate": 5.00,
+      "image": "/src/assets/Cards/Bairro.svg"
+    },
+    {
+      "id": 9,
+      "name": "Av. Augusto de Lima, 744 - Centro, Belo Horizonte, MG",
+      "description": "Localizado ao lado do mercado, com vagas amplas.",
+      "userRating": 4.0,
+      "hourlyRate": 40.00,
+      "image": "/src/assets/Cards/Mercado.svg"
+    },
+    {
+      "id": 10,
+      "name": "Av. Afonso Pena, 1377 - Centro, Belo Horizonte, MG",
+      "description": "Junto ao Parque Municipal, ótimo para passeios e caminhadas.",
+      "userRating": 4.9,
+      "hourlyRate": 18.00,
+      "image": "/src/assets/Cards/Parque.svg"
+    },
+    {
+      "id": 11,
+      "name": "Av. Luiz Paulo Franco, 683 - Belvedere, Belo Horizonte, MG",
+      "description": "Perfeito para quem trabalha em escritórios e precisa de estacionamento seguro.",
+      "userRating": 4.7,
+      "hourlyRate": 45.00,
+      "image": "/src/assets/Cards/Empresarial.svg"
+    },
+    {
+      "id": 12,
+      "name": "Av. Cristiano Machado, 4001 - Ipiranga, Belo Horizonte, MG",
+      "description": "Anexo ao hotel, oferecendo conveniência e segurança aos hóspedes.",
+      "userRating": 4.8,
+      "hourlyRate": 30.00,
+      "image": "/src/assets/Cards/Hotel.svg"
+    },
+    {
+      "id": 13,
+      "name": "Av. Amazonas, 6030 - Gameleira, Belo Horizonte, MG",
+      "description": "Estacionamento temporário para eventos, com fácil acesso e ampla capacidade.",
+      "userRating": 4.5,
+      "hourlyRate": 40.00,
+      "image": "/src/assets/Cards/Eventos.svg"
+    },
+    {
+      "id": 14,
+      "name": "Rodovia BR-040, Km 517 - Contagem, MG",
+      "description": "Localizado próximo ao porto seco, ideal para trabalhadores e visitantes.",
+      "userRating": 4.2,
+      "hourlyRate": 40.00,
+      "image": "/src/assets/Cards/Porto.svg"
+    },
+    {
+      "id": 15,
+      "name": "Rua Padre Pedro Pinto, 2000 - Venda Nova, Belo Horizonte, MG",
+      "description": "Estacionamento amplo com segurança 24 horas na Zona Norte da cidade.",
+      "userRating": 4.3,
+      "hourlyRate": 20.00,
+      "image": "/src/assets/Cards/Norte.svg"
+    }
+  ]
+}

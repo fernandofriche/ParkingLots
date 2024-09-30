@@ -1,0 +1,26 @@
+ .Cabecalho {
+     background-color: #1B2D8D;
+     height: 90px;
+     display: flex;
+     justify-content: center;
+     
+ }
+
+ .Acesso {
+     display: flex;
+     align-items: center;
+     flex-direction: column;
+     text-align: end;
+     position: fixed;
+ }
+
+ .Acesso h1 {
+     font-family: "Londrina Solid", sans-serif;
+     font-weight: 400;
+     color: BLACK;
+     font-size: 20px;
+ }
+
+ .Acesso img {
+    height: 20px;
+ }

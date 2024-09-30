@@ -1,0 +1,342 @@
+/* General Styles */
+body {
+    margin: 0;
+    font-family: "Inter", sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+/* Header */
+.Cabecalho {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    height: 70px;
+    z-index: 99;
+    background-color: #277D8E;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    padding: 10px 0;
+    transition: background-color 0.3s ease;
+}
+
+.DivLista {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Cabecalho ul {
+    display: flex;
+    align-items: center;
+    gap: 190px;
+    list-style: none;
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    color: white;
+    padding: 0 2%;
+}
+
+.Cabecalho ul a {
+    text-decoration: none;
+    color: white;
+    transition: color 0.3s ease;
+}
+
+/* .Cabecalho ul a:hover {
+    color: #1E9E5E;
+} */
+
+.Cabecalho img.Logo {
+    width: 120px;
+    transition: transform 0.3s ease;
+}
+
+.Logo {
+    width: 120px;
+}
+
+.UserIcon {
+    width: 40px;
+}
+
+/* Main Content */
+.DetalhesMainContent {
+    padding: 100px 20px 40px;
+    margin-top: 60px;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Details Container */
+.DetalhesContainer {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    transform: translateY(0);
+}
+
+/* Section Titles */
+.DetalhesContainer fieldset {
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.DetalhesContainer legend {
+    font-size: 15px;
+    font-weight: 500;
+    color: #999999;
+    margin-bottom: 10px;
+    padding: 0;
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    background-color: #fff;
+    width: auto;
+    padding: 0 10px;
+}
+
+.DetalhesContainer label{
+    font-size: 20px;
+    color: #353744 ;
+}
+
+.DetalhesContainer h2 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.DetalhesContainer p {
+    font-size: 16px;
+    color: #777;
+    margin-bottom: 20px;
+}
+
+.DetalhesContainer hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 20px 0;
+}
+
+/* Form */
+.Form {
+    margin-top: 30px;
+    text-align: left;
+}
+
+.InputGroup,
+.InputGroupHorizontal div {
+    margin-bottom: 20px;
+}
+
+.InputGroup label,
+.InputGroupHorizontal label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+.InputGroup input,
+.InputGroupHorizontal input,
+.InputGroupHorizontal select {
+    width: calc(100% - 24px); 
+    padding: 8px; 
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px; 
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.InputGroup input:focus,
+.InputGroupHorizontal input:focus,
+.InputGroupHorizontal select:focus {
+    border-color: #000000;
+    box-shadow: 0 0 10px rgba(35, 212, 95, 0.2);
+}
+
+.InputGroupHorizontal {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.InputGroupHorizontal div {
+    flex: 1;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 15px;
+    background-color: #277D8E;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #3b9fb3;
+    transform: translateY(-1px);
+}
+
+button[type="submit"]:active {
+    background-color: #529dac;
+    transform: translateY(-1px);
+}
+
+button[type="submit"]:focus {
+    outline: none;
+}
+
+/* Input mask adjustments */
+.InputGroupHorizontal input {
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.InputGroupHorizontal input:focus {
+    border-color: #23D45F;
+    box-shadow: 0 0 10px rgba(35, 212, 95, 0.2);
+}
+
+.CheckboxGroup {
+    display: flex;
+    align-items: center;
+    margin-left: 52%;
+}
+
+.CheckboxGroup label {
+    font-size: 12px; /* Tamanho menor do texto */
+    display: flex;
+    align-items: center;
+    color: #353744;
+}
+
+.CheckboxGroup input[type="checkbox"] {
+    width: 18px; /* Diminua o tamanho do checkbox */
+    height: 18px; /* Diminua o tamanho do checkbox */
+    margin-right: 0.5rem;
+    border-radius: 2px;
+    border: 2px solid #ccc;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.ModalContent {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+.ModalContent h2{
+    color: rgb(214, 0, 0);
+}
+
+.ModalButtons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.ModalButtons button {
+    background-color: #277D8E;
+    border: none;
+    padding: 6px;
+    color: #fff;
+    border-radius: 2px;
+    font-size: 1.1rem;
+}
+
+.ModalContent .Aviso{
+    font-weight: bold;
+    padding: 8px;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #353744;
+}
+
+.ModalConfirma {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.InfoContainer {
+    margin-bottom: 20px;
+}
+
+.InfoRow {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.Label {
+    font-weight: bold;
+    color: #353744;
+}
+
+.Value {
+    color: #353744;
+}
+
+.ModalButtons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.ProgressBarContainer {
+    width: 100%;
+    height: 5px;
+    background-color: #e0e0e0;
+    margin-bottom: 20px;
+    border-radius: 10px;
+  }
+  
+  .ProgressBar {
+    height: 100%;
+    background-color: #23d45f;
+    transition: width 0.3s ease;
+    border-radius: 10px;
+  }
+  
+  .Card {
+    background: #1f7a8c;
+    padding: 10px;
+    color: white;
+    border-radius: 8px;
+    width: 300px;
+    margin-top: 20px;
+  }
+  
+  .CheckIcon {
+    width: 50px;
+    height: 50px;
+    background-color: #23d45f;
+    border-radius: 50%;
+  }
+  
+

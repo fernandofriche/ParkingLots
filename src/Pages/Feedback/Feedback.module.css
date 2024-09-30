@@ -1,0 +1,51 @@
+.feedbackContainer {
+    width: 80%;
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.feedbackForm {
+    display: flex;
+    flex-direction: column;
+}
+
+.ratingContainer {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.filledStar {
+    color: gold;
+    cursor: pointer;
+}
+
+.emptyStar {
+    color: lightgray;
+    cursor: pointer;
+}
+
+.commentInput {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.feedbackList {
+    margin-top: 20px;
+}
+
+.feedbackItem {
+    border-bottom: 1px solid #eee;
+    padding: 10px 0;
+}
+
+.feedbackItem:last-child {
+    border-bottom: none;
+}

@@ -1,0 +1,233 @@
+@import url('https://fonts.googleapis.com/css2?family=Londrina+Solid:wght@100;300;400;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Londrina+Solid:wght@100;300;400;900&display=swap');
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.facebook {
+    color: #1F7A8C;
+}
+
+
+.container {
+    display: flex;
+    height: 100vh;
+    font-family: 'Poppins', sans-serif;
+}
+
+.tudo {
+    display: flex;
+    width: 100%;
+}
+
+.esquerda {
+    width: 60%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 30px;
+}
+
+.direita {
+    background: #1F7A8C;
+    width: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.logo {
+    margin-right: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.DivGoogle {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    justify-content: center;
+}
+
+.BtnGoogle {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 25px;  
+    border: 1px solid #1F7A8C;  
+    outline: none; 
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #757575;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    padding: 10px 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.BtnGoogle:hover {
+    background-color: #f5f5f5;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.BtnGoogle img {
+    width: 20px;
+    height: 20px;
+    align-items: center;
+}
+
+.separador {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 20px 0;
+    width: 100%;
+}
+
+.line {
+    flex: 1;
+    border: none;
+    border-top: 1px solid rgb(158, 158, 158);
+}
+
+.teste2 {
+    margin: 0 10px;
+    white-space: nowrap;
+    font-weight: bold;
+    font-size: 12px;
+    color: rgb(158, 158, 158);
+}
+
+.DivInputs h1 {
+    font-size: 3rem;
+    color: #277D8E;
+    margin-bottom: 1rem;
+}
+.DivInputs input {
+    border: 3px solid #1F7A8C;
+    border-radius: 5px;
+    width: 100%;
+    height: 50px;
+    padding: 0 10px;
+    font-size: 1rem;
+    font-weight: normal;
+}
+.DivInputs input::placeholder {
+    font-weight: bold;
+}
+.DivInputs input:focus {
+    border-color: #1F7A8C; /* Ajuste a cor conforme sua paleta de cores */
+    box-shadow: 0 0 5px rgba(20, 96, 107, 0.4)    ; /* Efeito de foco */
+}
+
+.PasswordContainer {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.PasswordContainer input {
+    width: calc(100% - 40px);
+    border-radius: 5px 0 0 5px;
+}
+
+.PasswordToggle {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    border-left: none;
+    border-radius: 0 5px 5px 0;
+}
+
+.esqueceuSenha {
+    color: #1F7A8C;
+    font-family: 'Londrina Solid', sans-serif;
+    font-size: 16px;
+    text-align: right;
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    cursor: pointer;
+}
+
+.BtnEntrar {
+    background-color: #1F7A8C;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 100%;
+    height: 50px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.BtnEntrar:hover {
+    background-color: #1F7A8C;
+}
+
+.Registrar {
+    margin-top: 20px;
+    text-align: center;
+    font-family: 'Londrina Solid', sans-serif;
+    font-size: 16px;
+    color: #1F7A8C;
+}
+
+.Registrar a {
+    color: #1F7A8C;
+    cursor: pointer;
+    text-decoration: underline;
+}
+/* Container para o input e o ícone */
+.PasswordContainer {
+    position: relative;
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* Estilos do input de senha */
+.PasswordContainer input {
+    width: 100%;
+    padding: 10px 40px 10px 10px; /* Espaço à direita para o ícone */
+    font-size: 16px;
+    border-radius: 4px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+/* Ícone de olho (show/hide password) */
+.PasswordToggle {
+    position: absolute;
+    right: 1px;
+    top: 70%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 18px; /* Tamanho do ícone */
+    color: #1F7A8C; /* Cor do ícone */
+}
+
+/* Adicionar efeito hover no ícone */
+.PasswordToggle:hover {
+    color: #555; /* Cor do ícone ao passar o mouse */
+}
+
+/* Estilo de foco do input */
+.PasswordContainer input:focus {
+    border-color: #1F7A8C; /* Ajuste a cor conforme sua paleta de cores */
+    box-shadow: 0 0 5px rgba(20, 96, 107, 0.4)    ; /* Efeito de foco */
+}

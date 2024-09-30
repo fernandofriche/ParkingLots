@@ -1,0 +1,265 @@
+/* Header */
+.Cabecalho {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    height: 70px;
+    z-index: 99;
+    background-color: #277D8E;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    padding: 10px 0;
+    transition: background-color 0.3s ease;
+}
+
+.DivLista {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Cabecalho ul {
+    display: flex;
+    align-items: center;
+    gap: 190px;
+    list-style: none;
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    color: white;
+    padding: 0 2%;
+}
+
+.Cabecalho ul a {
+    text-decoration: none;
+    color: white;
+    transition: color 0.3s ease;
+}
+
+.Cabecalho img.Logo {
+    width: 120px;
+    transition: transform 0.3s ease;
+}
+
+
+.UserIcon {
+    width: 50px;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+/* Main Content */
+.MainContent {
+    text-align: center;
+    margin-top: 10%;
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    font-size: 24px;
+    color: #333;
+    transition: opacity 0.3s ease;
+}
+
+.MainContent h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+    color: black;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    animation: fadeIn 1s ease-in-out;
+}
+
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.SearchBarWrapper input::placeholder {
+    color: #8D8D8D;
+}
+
+.SearchBarWrapper input {
+    border: 1.5px solid #277D8E;
+}
+
+.SearchBarWrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    max-width: 400px;
+    margin-right: 20px; /* Ajuste para dar espaço ao ícone de filtro */
+}
+
+.SearchBar {
+    width: 100%;
+    padding: 12px 40px 12px 20px; /* Espaço maior à direita para ícone de busca */
+    font-size: 16px;
+    border: none;
+    border-radius: 30px;
+    background-color: #f5f5f5;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+.SearchBar:focus {
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+    background-color: #ffffff;
+    outline: none;
+}
+
+.SearchIcon {
+    position: absolute;
+    right: 15px; /* Alinhamento à direita dentro do input */
+    top: 50%;
+    transform: translateY(-50%);
+    color: #277D8E;
+    pointer-events: none;
+}
+
+/* Cards */
+.CardContainer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    animation: fadeIn 1.2s ease-in-out;
+    animation-fill-mode: both;
+    margin-top: 2%;
+}
+
+.Card {
+    background-color: white;
+    border: 2px solid #277D8E;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    width: 250px;
+    color: white;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease forwards;
+    animation-delay: calc(0.1s * var(--i));
+}
+
+.Card h2 {
+    font-size: 22px;
+    margin-bottom: 10px;
+    color: black;
+}
+
+.Card p {
+    font-size: 16px;
+    margin: 5px 0;
+    color: #bbb;
+}
+
+.CardImage {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.Card:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Animation for Cards */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Button */
+.BtnReserar {
+    display: inline-block;
+    background-color: white;
+    color: #277D8E;
+    border: 2px solid #277D8E;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 10px;
+}
+
+.BtnReserar:active {
+    transform: translateY(0);
+}
+
+.FilterContainer {
+    right: 20px;
+    top: 150px;
+    z-index: 10;
+    border-radius: 50%; /* Garante o formato de círculo */
+    padding: 10px;
+    width: 50px; /* Defina uma largura e altura iguais */
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); 
+    transition: all 0.3s ease;
+}
+
+.FilterContainer:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); 
+}
+
+.FilterIcon {
+    cursor: pointer;
+    color: #277D8E;
+    font-size: 24px;
+}
+
+.FilterDropdown {
+    position: absolute;
+    right: 0;
+    top: 35px;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    border-radius: 10px; 
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); 
+    z-index: 10;
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: slideDown 0.3s forwards ease-in-out; 
+}
+
+/* Animação de deslizar */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.FilterDropdown button {
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    display: block;
+    text-align: left;
+    width: 100%;
+    color: #277D8E;
+    font-size: 16px;
+    transition: background-color 0.3s, color 0.3s ease; 
+}
+
+.FilterDropdown button:hover {
+    background-color: #277D8E; 
+    color: #fff;
+    border-radius: 8px; 
+}
