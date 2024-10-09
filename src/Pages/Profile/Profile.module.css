@@ -121,6 +121,32 @@
     position: relative;
 }
 
+.carrosContainer {
+    margin-top: 20px;
+}
+
+.carrosBox {
+    border: 2px solid #ccc; /* Borda do quadrado maior */
+    border-radius: 8px;
+    padding: 20px;
+    display: flex; /* Para alinhar os cards em linha */
+    flex-wrap: wrap; /* Para permitir que os cards se movam para a linha seguinte se não houver espaço */
+    gap: 15px; /* Espaço entre os cards */
+    background-color: #f9f9f9; /* Fundo do quadrado maior */
+    max-width: 600px; /* Ajuste conforme necessário */
+}
+
+.carroCard {
+    border: 1px solid #ddd; /* Borda dos cards menores */
+    border-radius: 6px;
+    padding: 10px;
+    width: 150px; /* Largura fixa dos cards */
+    background-color: #fff; /* Fundo dos cards menores */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Sombra leve para destaque */
+}
+
+
+
 .passwordContainer {
     display: flex;
     align-items: center;

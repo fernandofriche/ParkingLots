@@ -1,3 +1,5 @@
+// src/components/Profile.js
+
 import React, { useState, useEffect } from 'react';
 import Styles from './Profile.module.css';
 import { ToastContainer, toast } from 'react-toastify';
@@ -18,24 +20,48 @@ function Profile() {
     const [detalhesUsuario, setDetalhesUsuario] = useState(null);
     const [nomeCompleto, setNomeCompleto] = useState('');
     const [email, setEmail] = useState('');
-    const [isEditing, setIsEditing] = useState(false); // Para o modo de edição
+    const [isEditing, setIsEditing] = useState(false);
     const [mostrarMenu, setMostrarMenu] = useState(false);
-    const [mostrarModalVeiculos, setMostrarModalVeiculos] = useState(false); // Para o modal de veículos
-    const [carros, setCarros] = useState([]); // Estado para armazenar os carros registrados
+    const [carros, setCarros] = useState([]);
     const [senhaAtual, setSenhaAtual] = useState('');
     const [novaSenha, setNovaSenha] = useState('');
-    const [senhaVisivel, setSenhaVisivel] = useState(false);
-    const [senhaAtualVisivel, setSenhaAtualVisivel] = useState(false);
+    const [confirmarNovaSenha, setConfirmarNovaSenha] = useState('');
+    const [senhaVisivel, setSenhaVisivel] = useState({
+        atual: false,
+        nova: false,
+        confirmar: false
+    });
+    const [mostrarCarros, setMostrarCarros] = useState(false);
+    const [mostrarInfoUsuario, setMostrarInfoUsuario] = useState(true);
+    const [mostrarSenha, setMostrarSenha] = useState(false);
 
     const navigate = useNavigate();
 
-    // Função para alternar a visibilidade do menu de alterar senha
-    const alternarVisibilidadeSenha = () => setSenhaVisivel(!senhaVisivel);
-    const alternarVisibilidadeSenhaAtual = () => setSenhaAtualVisivel(!senhaAtualVisivel);
-    const alternarMenu = () => setMostrarMenu(!mostrarMenu);
+    const alternarVisibilidadeSenha = (tipo) => {
+        setSenhaVisivel(prev => ({
+            ...prev,
+            [tipo]: !prev[tipo]
+        }));
+    };
 
-    // Função para alternar a visibilidade do modal de veículos
-    const alternarModalVeiculos = () => setMostrarModalVeiculos(!mostrarModalVeiculos);
+    const alternarMenu = () => setMostrarMenu(!mostrarMenu);
+    const alternarMostrarCarros = () => {
+        setMostrarCarros(!mostrarCarros);
+        setMostrarInfoUsuario(false); // Oculta a exibição das informações do usuário
+        setMostrarSenha(false); // Oculta a exibição da senha
+    };
+
+    const exibirInfoUsuario = () => {
+        setMostrarInfoUsuario(true);
+        setMostrarCarros(false);
+        setMostrarSenha(false); // Oculta a exibição da senha
+    };
+
+    const exibirSenha = () => {
+        setMostrarSenha(true); // Exibe as informações da senha
+        setMostrarCarros(false); // Oculta a exibição dos carros
+        setMostrarInfoUsuario(false); // Oculta as informações do usuário
+    };
 
     const dataBaseUsuario = async () => {
         try {
@@ -61,14 +87,15 @@ function Profile() {
 
     useEffect(() => {
         dataBaseUsuario();
+        buscarCarros();
     }, []);
 
     const handleUpdateProfile = async () => {
         try {
             await ProfileController.updateUserProfile(nomeCompleto, email);
             toast.success('Dados atualizados com sucesso!', { position: "top-center" });
-            setIsEditing(false); // Fechar o modo de edição
-            dataBaseUsuario(); // Atualizar os dados
+            setIsEditing(false);
+            dataBaseUsuario();
         } catch (error) {
             console.error('Erro ao atualizar os dados do perfil:', error);
             toast.error('Erro ao atualizar os dados. Tente novamente.', { position: "top-center" });
@@ -90,9 +117,17 @@ function Profile() {
     };
 
     const AtualizarSenha = async () => {
+        if (novaSenha !== confirmarNovaSenha) {
+            toast.error('As novas senhas não coincidem.', { position: "top-center" });
+            return;
+        }
+
         try {
             await ProfileController.updateUserPassword(novaSenha, senhaAtual);
             toast.success('Senha atualizada com sucesso!', { position: "top-center" });
+            setSenhaAtual('');
+            setNovaSenha('');
+            setConfirmarNovaSenha('');
         } catch (error) {
             console.error('Erro ao atualizar a senha:', error);
             toast.error(error.message, { position: "top-center" });
@@ -130,26 +165,24 @@ function Profile() {
                     </div>
                 </header>
 
-                {/* Menu lateral */}
                 <aside className={Styles.sidebar}>
                     <ul className={Styles.menu}>
-                        <li><button onClick={() => navigate('/Profile')}><img src={iconProfile}/> Perfil</button></li>
-                        <li><button><img src={iconHistorico}/> Histórico</button></li>
-                        <li><button onClick={alternarMenu}><img src={iconPassword}/>Alterar Senha</button></li>
-                        <li><button onClick={async () => { alternarModalVeiculos(); await buscarCarros(); }}><img src={iconCars}/>Veículos</button></li>
+                        <li><button onClick={exibirInfoUsuario}><img src={iconProfile} /> Perfil</button></li>
+                        <li><button><img src={iconHistorico} /> Histórico</button></li>
+                        <li><button onClick={exibirSenha}><img src={iconPassword} /> Alterar Senha</button></li>
+                        <li><button onClick={alternarMostrarCarros}><img src={iconCars} /> Veículos</button></li>
                         <li><button onClick={Sair}>Sair</button></li>
                         <li><button onClick={handleDeleteAccount}>Excluir Conta</button></li>
                     </ul>
                 </aside>
 
-                {/* Conteúdo principal */}
                 <div className={Styles.mainContent}>
                     <h2>Informações de Cadastro</h2>
                     {isEditing ? (
                         <div className={Styles.userInfo}>
                             <label>
                                 Nome Completo:
-                                <input 
+                                <input
                                     type="text"
                                     value={nomeCompleto}
                                     onChange={(e) => setNomeCompleto(e.target.value)}
@@ -158,7 +191,7 @@ function Profile() {
                             <hr />
                             <label>
                                 Email:
-                                <input 
+                                <input
                                     type="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
@@ -169,68 +202,75 @@ function Profile() {
                             <button className={Styles.cancelButton} onClick={() => setIsEditing(false)}>Cancelar</button>
                         </div>
                     ) : (
-                        <div className={Styles.userInfo}>
-                            <p><strong>Nome Completo: </strong>{detalhesUsuario?.nomeCompleto}</p>
-                            <hr />
-                            <p><strong>Email: </strong>{detalhesUsuario?.email}</p>
-                            <hr />
-                            <button className={Styles.attPerfil} onClick={() => setIsEditing(true)}>Atualizar Perfil</button>
+                        mostrarInfoUsuario && (
+                            <div className={Styles.userInfo}>
+                                <p><strong>Nome Completo: </strong>{detalhesUsuario?.nomeCompleto}</p>
+                                <hr />
+                                <p><strong>Email: </strong>{detalhesUsuario?.email}</p>
+                                <hr />
+                                <button className={Styles.attPerfil} onClick={() => setIsEditing(true)}>Editar</button>
+                            </div>
+                        )
+                    )}
+
+                    {mostrarCarros && (
+                        <div className={Styles.carrosContainer}>
+                            <h3>Seus Veículos Registrados</h3>
+                            <div className={Styles.carrosBox}> {/* Caixa para os carros */}
+                                {carros.length > 0 ? (
+                                    carros.map((carro, index) => (
+                                        <div key={index} className={Styles.carroCard}> {/* Card individual para cada carro */}
+                                            <p><strong>Modelo: </strong>{carro.modelo}</p>
+                                            <p><strong>Placa: </strong>{carro.placa}</p>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p>Você não possui veículos registrados.</p>
+                                )}
+                            </div>
                         </div>
                     )}
-                </div>
 
-                {/* Modal de Veículos */}
-                {mostrarModalVeiculos && (
-                    <div className={Styles.modalBackground}>
-                        <div className={Styles.modalContainer}>
-                            <h3>Seus Veículos Registrados</h3>
-                            {carros.length > 0 ? (
-                                carros.map((carro, index) => (
-                                    <div key={index} className={Styles.carroItem}>
-                                        <p><strong>Modelo: </strong>{carro.modelo}</p>
-                                        <p><strong>Placa: </strong>{carro.placa}</p>
-                                        <hr />
-                                    </div>
-                                ))
-                            ) : (
-                                <p>Você não possui veículos registrados.</p>
-                            )}
-                            <button className={Styles.closeButton} onClick={alternarModalVeiculos}>Fechar</button>
-                        </div>
-                    </div>
-                )}
-
-                {mostrarMenu && (
-                    <div className={Styles.modalBackground}>
-                        <div className={Styles.updatePasswordContainer}>
-                            <h3>Atualizar Senha</h3>
-                            <div className={Styles.passwordContainer}>
+                    {mostrarSenha && (
+                        <div className={Styles.senha}>
+                            <h2>Alterar Senha</h2>
+                            <label>
+                                Senha Atual:
                                 <input
-                                    type={senhaAtualVisivel ? 'text' : 'password'}
-                                    placeholder="Senha Atual"
+                                    type={senhaVisivel.atual ? 'text' : 'password'}
                                     value={senhaAtual}
                                     onChange={(e) => setSenhaAtual(e.target.value)}
                                 />
-                                <button onClick={alternarVisibilidadeSenhaAtual}>
-                                    {senhaAtualVisivel ? <FaEyeSlash /> : <FaEye />}
+                                <button onClick={() => alternarVisibilidadeSenha('atual')}>
+                                    {senhaVisivel.atual ? <FaEyeSlash /> : <FaEye />}
                                 </button>
-                            </div>
-                            <div className={Styles.passwordContainer}>
+                            </label>
+                            <label>
+                                Nova Senha:
                                 <input
-                                    type={senhaVisivel ? 'text' : 'password'}
-                                    placeholder="Nova Senha"
+                                    type={senhaVisivel.nova ? 'text' : 'password'}
                                     value={novaSenha}
                                     onChange={(e) => setNovaSenha(e.target.value)}
                                 />
-                                <button onClick={alternarVisibilidadeSenha}>
-                                    {senhaVisivel ? <FaEyeSlash /> : <FaEye />}
+                                <button onClick={() => alternarVisibilidadeSenha('nova')}>
+                                    {senhaVisivel.nova ? <FaEyeSlash /> : <FaEye />}
                                 </button>
-                            </div>
-                            <button onClick={AtualizarSenha} className={Styles.attPerfil}>Atualizar Senha</button>
-                            <button onClick={alternarMenu} className={Styles.cancelButton}>Cancelar</button>
+                            </label>
+                            <label>
+                                Confirmar Nova Senha:
+                                <input
+                                    type={senhaVisivel.confirmar ? 'text' : 'password'}
+                                    value={confirmarNovaSenha}
+                                    onChange={(e) => setConfirmarNovaSenha(e.target.value)}
+                                />
+                                <button onClick={() => alternarVisibilidadeSenha('confirmar')}>
+                                    {senhaVisivel.confirmar ? <FaEyeSlash /> : <FaEye />}
+                                </button>
+                            </label>
+                            <button onClick={AtualizarSenha}>Salvar Nova Senha</button>
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
         </>
     );

@@ -1,7 +1,7 @@
 // src/BackEnd/Profile.js
 import { auth, db } from '../Services/firebaseConfig';
 import { doc, getDoc, deleteDoc, updateDoc } from 'firebase/firestore';
-import { reauthenticateWithCredential, EmailAuthProvider } from 'firebase/auth';
+import { reauthenticateWithCredential, EmailAuthProvider, updatePassword } from 'firebase/auth';
 
 class ProfileService {
     async getUserData() {
@@ -29,7 +29,9 @@ class ProfileService {
 
         const credencial = EmailAuthProvider.credential(usuario.email, senhaAtual);
         await reauthenticateWithCredential(usuario, credencial);
-        await usuario.updatePassword(novaSenha);
+        
+        // Aqui, use o método updatePassword do Firebase
+        await updatePassword(usuario, novaSenha);
     }
 
     async updateUserProfile(nomeCompleto, email) {
