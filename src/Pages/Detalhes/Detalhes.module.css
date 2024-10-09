@@ -63,8 +63,8 @@ body {
 /* Main Content */
 .DetalhesMainContent {
     padding: 100px 20px 40px;
-    margin-top: 60px;
-    max-width: 1000px;
+    margin-top: 15px;
+    max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -80,13 +80,7 @@ body {
 }
 
 /* Section Titles */
-.DetalhesContainer fieldset {
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 30px;
-    position: relative;
-}
+
 
 .DetalhesContainer legend {
     font-size: 15px;
@@ -137,7 +131,8 @@ body {
 }
 
 .InputGroup label,
-.InputGroupHorizontal label {
+.InputGroupHorizontal label
+ {
     display: block;
     font-weight: bold;
     margin-bottom: 8px;
@@ -162,15 +157,6 @@ body {
     box-shadow: 0 0 10px rgba(35, 212, 95, 0.2);
 }
 
-.InputGroupHorizontal {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-}
-
-.InputGroupHorizontal div {
-    flex: 1;
-}
 
 button[type="submit"] {
     width: 100%;
@@ -199,18 +185,6 @@ button[type="submit"]:focus {
     outline: none;
 }
 
-/* Input mask adjustments */
-.InputGroupHorizontal input {
-    font-size: 16px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.InputGroupHorizontal input:focus {
-    border-color: #23D45F;
-    box-shadow: 0 0 10px rgba(35, 212, 95, 0.2);
-}
 
 .CheckboxGroup {
     display: flex;
@@ -219,15 +193,15 @@ button[type="submit"]:focus {
 }
 
 .CheckboxGroup label {
-    font-size: 12px; /* Tamanho menor do texto */
+    font-size: 12px; 
     display: flex;
     align-items: center;
     color: #353744;
 }
 
 .CheckboxGroup input[type="checkbox"] {
-    width: 18px; /* Diminua o tamanho do checkbox */
-    height: 18px; /* Diminua o tamanho do checkbox */
+    width: 18px; 
+    height: 18px; 
     margin-right: 0.5rem;
     border-radius: 2px;
     border: 2px solid #ccc;
@@ -259,8 +233,9 @@ button[type="submit"]:focus {
     border: none;
     padding: 6px;
     color: #fff;
-    border-radius: 2px;
+    border-radius: 4px;
     font-size: 1.1rem;
+    cursor: pointer;
 }
 
 .ModalContent .Aviso{
@@ -322,21 +297,226 @@ button[type="submit"]:focus {
     transition: width 0.3s ease;
     border-radius: 10px;
   }
-  
-  .Card {
-    background: #1f7a8c;
-    padding: 10px;
-    color: white;
-    border-radius: 8px;
-    width: 300px;
-    margin-top: 20px;
-  }
-  
   .CheckIcon {
     width: 50px;
     height: 50px;
     background-color: #23d45f;
     border-radius: 50%;
   }
-  
+/* Container do Card */
+.CardPreview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 12px;
+}
+.input-error {
+    border: 1px solid red;
+}
 
+.error-text {
+    color: red;
+    font-size: 12px;
+}
+
+.Card {
+    background: linear-gradient(135deg, #1f7a8c, #3b99b3);
+    padding: 15px; 
+    border-radius: 12px; 
+    color: white;
+    width: 260px; 
+    height: 140px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); 
+}
+
+/* Ícone de cartão no canto superior direito */
+.CardIcon {
+    position: absolute;
+    right: 10px; 
+    font-size: 18px; 
+    opacity: 0.7;
+}
+
+.CardNumber {
+    font-size: 18px; 
+    letter-spacing: 1.5px;
+    margin-bottom: 15px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.CardDetails {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.CardHolder {
+    font-size: 14px; 
+    font-weight: 500;
+    margin-bottom: 8px; 
+}
+
+.CardExpiry {
+    font-size: 14px; 
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px; 
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .Card {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .CardNumber {
+        font-size: 16px;
+    }
+
+    .CardHolder,
+    .CardExpiry {
+        font-size: 12px;
+    }
+
+    .CardIcon {
+        font-size: 16px;
+    }
+}
+
+
+.ButtonDetalhes {
+    padding: 10px;
+    width: auto; 
+    background-color: #277D8E;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-left: 2px;
+    transition: background-color 0.8s ease;
+}
+
+.ButtonDetalhes:hover {
+    background-color: white;
+    border: 3px solid #277D8E;
+    color: #333;
+    transition: background-color 0.3s ease;
+}
+
+
+.InputGroupHorizontal {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.InputGroupHorizontal div {
+    flex: 1;
+}
+
+.DetalhesContainer fieldset {
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.InputGroupHorizontalDois {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.InputGroupHorizontalDois input {
+    font-size: 16px;
+    border-radius: 8px; 
+    border: 1px solid #ddd;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    height: 35px; 
+}
+
+.InputGroupHorizontalDoisD input {
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    height: 35px; 
+}
+
+.InputGroupHorizontalDois label {
+    font-size: 14px;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.InputDetalhesDois {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Alinhamento de validade e CVV lado a lado */
+.ValidadeCvvContainer {
+    display: flex;
+    gap: 20px; 
+}
+
+.ValidadeCvvContainer div {
+    flex: 1;
+}
+.ValidadeCvvContainer input {
+    width: 100%; 
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+@media (max-width: 768px) {
+    .ValidadeCvvContainer {
+        flex-direction: column;
+    }
+
+    .ValidadeCvvContainer div {
+        margin-bottom: 15px;
+    }
+}
+
+.InputGroupHorizontal input {
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.InputGroupHorizontal input:focus {
+    border-color: #23D45F;
+    box-shadow: 0 0 10px rgba(35, 212, 95, 0.2);
+}
+
+.DetalhesContainer label {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+.InputDetalhes {
+    width: 100%;  
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}

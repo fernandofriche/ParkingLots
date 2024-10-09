@@ -1,6 +1,6 @@
 // src/BackEnd/ProfileController.js
 import ProfileService from '../Profile';
-import ProfileModel from "../Models/ProfileModel"
+import ProfileModel from "../Models/ProfileModel";
 
 class ProfileController {
     async getUserProfile() {
@@ -9,6 +9,10 @@ class ProfileController {
             return new ProfileModel(userData.nomeCompleto, userData.email);
         }
         return null;
+    }
+
+    async updateUserProfile(nomeCompleto, email) {
+        return await ProfileService.updateUserProfile(nomeCompleto, email);
     }
 
     async updateUserPassword(novaSenha, senhaAtual) {

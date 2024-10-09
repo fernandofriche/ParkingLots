@@ -6,6 +6,8 @@ import Styles from './Detalhes.module.css';
 import LogoNew from '../../assets/Images/LogoNewVersion.png';
 import CircleUser from '../../assets/Images/CircleUser.png';
 import InputMask from 'react-input-mask';
+import { FaRegCreditCard, FaUser, FaCalendarAlt } from 'react-icons/fa';
+
 
 
 function Detalhes() {
@@ -34,6 +36,8 @@ function Detalhes() {
     const [saida, setSaida] = useState("");
     const [isMercosul, setIsMercosul] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [isValid, setIsValid] = useState(true);
+
 
     useEffect(() => {
         fetch('/parkinglots.json')
@@ -54,6 +58,22 @@ function Detalhes() {
             });
     }, [id]);
 
+
+    const handleCpfChange = (e) => {
+        const value = e.target.value;
+        setCpf(value);
+
+        // Remove os caracteres não numéricos para validação
+        const cpfNumbersOnly = value.replace(/\D/g, '');
+
+        // Verifica se o nono dígito é 6 (pertence a MG)
+        if (cpfNumbersOnly.length === 11 && cpfNumbersOnly[8] !== '6') {
+            setIsValid(false);
+        } else {
+            setIsValid(true);
+        }
+    };
+
     const handlePlacaChange = (e) => {
         const placaInput = e.target.value.toUpperCase();
         setPlaca(placaInput);
@@ -66,15 +86,27 @@ function Detalhes() {
         }
     };
 
+    const formatarDataHora = (data) => {
+        const date = new Date(data);
+        const horas = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Formato hh:mm
+        const dataFormatada = date.toLocaleDateString('pt-BR'); // Formato dd/mm/aaaa
+        return `${horas} ${dataFormatada}`;
+    };
+    
 
     const validarStep1 = () => {
         if (!nome || !telefone || !cpf) {
             alert("Preencha todos os dados pessoais para continuar.");
             return false;
         }
+    
+        if (!isValid) {
+            alert("O CPF deve ser de Minas Gerais.");
+            return false; 
+        }
         return true;
     };
-
+    
     const validarStep2 = () => {
         // Verifique se a placa é válida
         if (placa.length !== 7) {
@@ -96,12 +128,13 @@ function Detalhes() {
     };
 
     const validarStep4 = () => {
-        if (!paymentMethod || !cardNumber || !cardHolder || !expiryDate || !cvv) {
+        if (!cardNumber || !cardHolder || !expiryDate || !cvv) {
             alert("Preencha todos os dados do pagamento para continuar.");
             return false;
         }
         return true;
     };
+
 
 
     // Atualiza Barra de Progresso
@@ -136,7 +169,7 @@ function Detalhes() {
 
 
     const confirmPurchase = () => {
-        setIsPurchaseConfirmed(true);
+        setShowModal(true);
     };
 
 
@@ -211,33 +244,36 @@ function Detalhes() {
     };
 
     const validateExpiryDate = (date) => {
-        // Obter o mês e o ano atuais
         const currentDate = new Date();
-        const currentMonth = currentDate.getMonth() + 1; // Mês atual (0-indexado)
-        const currentYear = currentDate.getFullYear() % 100; // Dois últimos dígitos do ano
-
-        // Separar o mês e o ano da data de validade inserida
+        const currentMonth = currentDate.getMonth() + 1;
+        const currentYear = currentDate.getFullYear() % 100;
+    
         const [enteredMonth, enteredYear] = date.split('/').map(Number);
-
-        // Verificações
+    
+        // Verifique se o mês está acima de 12
+        if (enteredMonth < 1 || enteredMonth > 12) {
+            setError('Mês inválido.');
+            return; // Saia da função se o mês for inválido
+        }
+    
         if (enteredYear < currentYear) {
             setError('Ano inválido.');
         } else if (enteredYear === currentYear && enteredMonth < currentMonth) {
             setError('Mês inválido.');
         } else {
-            setError(null); // Data válida
+            setError(null);
         }
     };
-
+    
     const handleExpiryDateChange = (e) => {
         const newValue = e.target.value;
         setExpiryDate(newValue);
-
-        // Só validar quando o input estiver completo (4 caracteres: MM/YY)
+    
         if (newValue.length === 5) {
             validateExpiryDate(newValue);
         }
     };
+    
     return (
         <div>
             <header className={Styles.Cabecalho}>
@@ -290,7 +326,7 @@ function Detalhes() {
                                         id="nome"
                                         name="nome"
                                         required
-                                        value={nome} // Mantém o valor inserido
+                                        value={nome}
                                         onChange={(e) => setNome(e.target.value)}
                                     />
                                 </div>
@@ -303,7 +339,7 @@ function Detalhes() {
                                             id="telefone"
                                             name="telefone"
                                             required
-                                            value={telefone} // Mantém o valor inserido
+                                            value={telefone}
                                             onChange={(e) => setTelefone(e.target.value)}
                                         >
                                             {(inputProps) => <input {...inputProps} />}
@@ -316,11 +352,17 @@ function Detalhes() {
                                             id="cpf"
                                             name="cpf"
                                             required
-                                            value={cpf} // Mantém o valor inserido
-                                            onChange={(e) => setCpf(e.target.value)}
+                                            value={cpf}
+                                            onChange={handleCpfChange}
                                         >
-                                            {(inputProps) => <input {...inputProps} />}
+                                            {(inputProps) => (
+                                                <input
+                                                    {...inputProps}
+                                                    className={isValid ? '' : 'input-error'} // Adiciona uma classe de erro se CPF for inválido
+                                                />
+                                            )}
                                         </InputMask>
+                                        {!isValid && <span className="error-text">CPF deve ser de Minas Gerais</span>}
                                     </div>
                                 </div>
                                 <button type="button" className={Styles.ButtonDetalhes} onClick={() => { if (validarStep1()) handleNextStep(); }}>Prosseguir</button>
@@ -332,13 +374,13 @@ function Detalhes() {
                                 <legend>2. Informações do Veículo</legend>
                                 <div className={Styles.InputGroupHorizontal}>
                                     <div>
-                                        <label htmlFor="modelo">Modelo do Veículo:</label>
+                                        <label htmlFor="modelo">Modelo e Marca do Veículo:</label>
                                         <input
                                             type="text"
                                             id="modelo"
                                             name="modelo"
                                             required
-                                            value={modelo} // Mantém o valor inserido
+                                            value={modelo}
                                             onChange={(e) => setModelo(e.target.value)}
                                         />
                                     </div>
@@ -356,16 +398,7 @@ function Detalhes() {
 
                                     </div>
                                 </div>
-                                <div className={Styles.CheckboxGroup}>
-                                    <label>
-                                        <input
-                                            type="checkbox"
-                                            checked={isMercosul} // Mantém o valor inserido
-                                            onChange={(e) => setIsMercosul(e.target.checked)}
-                                        />
-                                        Placa MERCOSUL
-                                    </label>
-                                </div>
+                               
                                 <button type="button" className={Styles.ButtonDetalhes} onClick={handlePreviousStep}>Voltar</button>
                                 <button type="button" className={Styles.ButtonDetalhes} onClick={() => { if (validarStep2()) handleNextStep(); }}>
                                     Prosseguir
@@ -384,7 +417,7 @@ function Detalhes() {
                                             id="entrada"
                                             name="entrada"
                                             required
-                                            value={entrada} // Mantém o valor inserido
+                                            value={entrada}
                                             min={new Date().toISOString().slice(0, 16)}
                                             onChange={(e) => {
                                                 setEntrada(e.target.value);
@@ -399,7 +432,7 @@ function Detalhes() {
                                             id="saida"
                                             name="saida"
                                             required
-                                            value={saida} // Mantém o valor inserido
+                                            value={saida}
                                             min={entrada || new Date().toISOString().slice(0, 16)}
                                             onChange={(e) => {
                                                 const saidaValue = e.target.value;
@@ -430,49 +463,24 @@ function Detalhes() {
                         {currentStep === 4 && (
                             <fieldset className={Styles.Fieldset}>
                                 <legend>4. Detalhes do Pagamento</legend>
-                                <div>
-                                    <label>
-                                        <input
-                                            className={Styles.InputDetalhes}
-                                            type="radio"
-                                            name="paymentMethod"
-                                            value="credit"
-                                            checked={paymentMethod === "credit"}
-                                            onChange={(e) => setPaymentMethod(e.target.value)}
-                                        />
-                                        Cartão de Crédito
-                                    </label>
-                                    <label>
-                                        <input
-                                            className={Styles.InputDetalhes}
-                                            type="radio"
-                                            name="paymentMethod"
-                                            value="debit"
-                                            checked={paymentMethod === "debit"}
-                                            onChange={(e) => setPaymentMethod(e.target.value)}
-                                        />
-                                        Cartão de Débito
-                                    </label>
-                                </div>
-
-                                <div className={Styles.InputGroupHorizontal}>
+                                <div className={Styles.InputGroupHorizontalDois}>
                                     <label htmlFor="cardHolder">Titular do Cartão:</label>
                                     <input
-                                        className={Styles.InputDetalhes}
+                                        className={Styles.InputDetalhesDois}
                                         type="text"
                                         id="cardHolder"
-                                        value={cardHolder} // Salvar o valor
+                                        value={cardHolder}
                                         onChange={(e) => setCardHolder(e.target.value)}
                                         required
                                     />
                                 </div>
 
-                                <div className={Styles.InputGroupHorizontal}>
+                                <div className={Styles.InputGroupHorizontalDois}>
                                     <label htmlFor="cardNumber">Número do Cartão:</label>
                                     <InputMask
                                         mask="9999 9999 9999 9999"
                                         id="cardNumber"
-                                        value={cardNumber} // Salvar o valor
+                                        value={cardNumber}
                                         onChange={(e) => setCardNumber(e.target.value)}
                                         required
                                     >
@@ -480,41 +488,50 @@ function Detalhes() {
                                     </InputMask>
                                 </div>
 
-                                <div className={Styles.InputGroupHorizontal}>
-                                    <div>
-                                        <label htmlFor="expiryDate">Validade:</label>
-                                        <InputMask
-                                            mask="99/99"
-                                            id="expiryDate"
-                                            value={expiryDate}
-                                            onChange={handleExpiryDateChange}
-                                            required
-                                        >
-                                            {(inputProps) => <input {...inputProps} />}
-                                        </InputMask>
-                                        {error && <span style={{ color: 'red' }}>{error}</span>}
-                                    </div>
+                                <div className={Styles.InputGroupHorizontalDoisD}>
+                                    <div className={Styles.ValidadeCvvContainer}>
+                                        <div>
+                                            <label htmlFor="expiryDate">Validade:</label>
+                                            <InputMask
+                                                mask="99/99"
+                                                id="expiryDate"
+                                                value={expiryDate}
+                                                onChange={handleExpiryDateChange}
+                                                required
+                                            >
+                                                {(inputProps) => <input {...inputProps} />}
+                                            </InputMask>
+                                            {error && <span style={{ color: 'red' }}>{error}</span>}
+                                        </div>
 
-                                    <div>
-                                        <label htmlFor="cvv">CVV:</label>
-                                        <InputMask
-                                            mask="999"
-                                            id="cvv"
-                                            value={cvv} // Salvar o valor
-                                            onChange={(e) => setCvv(e.target.value)}
-                                            required
-                                        >
-                                            {(inputProps) => <input {...inputProps} />}
-                                        </InputMask>
+                                        <div>
+                                            <label htmlFor="cvv">CVV:</label>
+                                            <InputMask
+                                                mask="999"
+                                                id="cvv"
+                                                value={cvv}
+                                                onChange={(e) => setCvv(e.target.value)}
+                                                required
+                                            >
+                                                {(inputProps) => <input {...inputProps} />}
+                                            </InputMask>
+                                        </div>
                                     </div>
                                 </div>
 
+
                                 <div className={Styles.CardPreview}>
-                                    {/* Real-time preview of card details */}
                                     <div className={Styles.Card}>
+                                        <div className={Styles.CardIcon}><FaRegCreditCard /></div>
                                         <div className={Styles.CardNumber}>{cardNumber || "•••• •••• •••• ••••"}</div>
-                                        <div className={Styles.CardHolder}>{cardHolder || "Nome do Titular"}</div>
-                                        <div className={Styles.CardExpiry}>{expiryDate || "MM/AA"}</div>
+                                        <div className={Styles.CardDetails}>
+                                            <div className={Styles.CardHolder}>
+                                                <FaUser /> {cardHolder || "Nome do Titular"}
+                                            </div>
+                                            <div className={Styles.CardExpiry}>
+                                                <FaCalendarAlt /> {expiryDate || "MM/AA"}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -528,8 +545,9 @@ function Detalhes() {
                         )}
 
                         {currentStep === 5 && (
+                            <fieldset>
                             <div className={Styles.Form}>
-                                <h2>5. Confirmação de Reserva</h2>
+                                <legend>5. Confirmação de Reserva</legend>
                                 {isPurchaseConfirmed ? (
                                     <div className={Styles.Confirmation}>
                                         <div className={Styles.CheckIcon}></div>
@@ -537,12 +555,14 @@ function Detalhes() {
                                     </div>
                                 ) : (
                                     <div>
-                                        <p>Revise sua reserva antes de confirmar.</p>
+                                        <label>Revise sua reserva antes de confirmar.</label>
+                                        <br />
                                         <button type="button" className={Styles.ButtonDetalhes} onClick={handlePreviousStep}>Voltar</button>
-                                        <button type="button" className={Styles.ButtonDetalhes} onClick={confirmPurchase}>Confirmar Reserva</button>
+                                        <button type="button" className={Styles.ButtonDetalhes} onClick={confirmPurchase}>Revisar Reserva</button>
                                     </div>
                                 )}
                             </div>
+                            </fieldset>
                         )}
                     </div>
                 )}
@@ -550,47 +570,48 @@ function Detalhes() {
 
             {/* Modal de confirmação */}
             {showModal && (
-                <div className={Styles.ModalConfirma}>
-                    <div className={Styles.ModalContent}>
-                        <h2>Atenção!</h2>
-                        <p className={Styles.Aviso}>Revise as informações inseridas! Após a confirmação, os dados não poderão ser alterados.</p>
+    <div className={Styles.ModalConfirma}>
+        <div className={Styles.ModalContent}>
+            <h2>Atenção!</h2>
+            <p className={Styles.Aviso}>Revise as informações inseridas! Após a confirmação, os dados não poderão ser alterados.</p>
 
-                        {/* Container das informações */}
-                        <div className={Styles.InfoContainer}>
-                            <div className={Styles.InfoRow}>
-                                <span className={Styles.Label}>Nome:</span>
-                                <span className={Styles.Value}>{nome}</span>
-                            </div>
-                            <div className={Styles.InfoRow}>
-                                <span className={Styles.Label}>Telefone:</span>
-                                <span className={Styles.Value}>{telefone}</span>
-                            </div>
-                            <div className={Styles.InfoRow}>
-                                <span className={Styles.Label}>Placa do Veículo:</span>
-                                <span className={Styles.Value}>{placa}</span>
-                            </div>
-                            <div className={Styles.InfoRow}>
-                                <span className={Styles.Label}>Entrada:</span>
-                                <span className={Styles.Value}>{entrada}</span>
-                            </div>
-                            <div className={Styles.InfoRow}>
-                                <span className={Styles.Label}>Saída:</span>
-                                <span className={Styles.Value}>{saida}</span>
-                            </div>
-                            <div className={Styles.InfoRow}>
-                                <span className={Styles.Label}>Valor Total:</span>
-                                <span className={Styles.Value}>R$ {calcularValorTotal(entrada, saida, parkingLot.hourlyRate).toFixed(2)}</span>
-                            </div>
-                        </div>
-
-                        {/* Botões de confirmação */}
-                        <div className={Styles.ModalButtons}>
-                            <button onClick={ConfirmarReserva}>Confirmar</button>
-                            <button onClick={closeModal}>Cancelar</button>
-                        </div>
-                    </div>
+            {/* Container das informações */}
+            <div className={Styles.InfoContainer}>
+                <div className={Styles.InfoRow}>
+                    <span className={Styles.Label}>Nome:</span>
+                    <span className={Styles.Value}>{nome}</span>
                 </div>
-            )}
+                <div className={Styles.InfoRow}>
+                    <span className={Styles.Label}>Telefone:</span>
+                    <span className={Styles.Value}>{telefone}</span>
+                </div>
+                <div className={Styles.InfoRow}>
+                    <span className={Styles.Label}>Placa do Veículo:</span>
+                    <span className={Styles.Value}>{placa}</span>
+                </div>
+                <div className={Styles.InfoRow}>
+                    <span className={Styles.Label}>Entrada:</span>
+                    <span className={Styles.Value}>{formatarDataHora(entrada)}</span>
+                </div>
+                <div className={Styles.InfoRow}>
+                    <span className={Styles.Label}>Saída:</span>
+                    <span className={Styles.Value}>{formatarDataHora(saida)}</span>
+                </div>
+                <div className={Styles.InfoRow}>
+                    <span className={Styles.Label}>Valor Total:</span>
+                    <span className={Styles.Value}>R$ {calcularValorTotal(entrada, saida, parkingLot.hourlyRate).toFixed(2)}</span>
+                </div>
+            </div>
+
+            {/* Botões de confirmação */}
+            <div className={Styles.ModalButtons}>
+                <button onClick={ConfirmarReserva}>Confirmar</button>
+                <button onClick={closeModal}>Cancelar</button>
+            </div>
+        </div>
+    </div>
+)}
+
         </div>
     );
 }

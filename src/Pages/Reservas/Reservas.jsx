@@ -5,13 +5,14 @@ import Styles from './Reservas.module.css';
 import LogoNew from '../../assets/Images/LogoNewVersion.png';
 import CircleUser from '../../assets/Images/CircleUser.png';
 import { useNavigate } from 'react-router-dom';
-import iconEdit from '../../assets/Images/iconEdit.png';
 import iconDelete from '../../assets/Images/iconDelete.png';
+import { FcCancel } from "react-icons/fc";
 
 function Reservas() {
     const navigate = useNavigate();
     const [reservas, setReservas] = useState([]);
-    const [reservaEditando, setReservaEditando] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const [reservationId, setReservationId] = useState(null); // Armazena o ID da reserva a ser cancelada
     const [parkingLots, setParkingLots] = useState([]);
     const [editForm, setEditForm] = useState({
         placa: '',
@@ -81,7 +82,6 @@ function Reservas() {
         const horaEntrada = new Date(entrada);
         const horaSaida = new Date(saida);
 
-        // Se a hora de saída for antes da hora de entrada, adiciona um dia
         if (horaSaida <= horaEntrada) {
             horaSaida.setDate(horaSaida.getDate() + 1);
         }
@@ -100,61 +100,6 @@ function Reservas() {
         }
     }, [editForm, parkingLots]);
 
-    const handleEdit = (reserva) => {
-        setReservaEditando(reserva);
-        setEditForm({
-            placa: reserva.placa,
-            local: reserva.local,
-            entrada: reserva.entrada.split('T').join('T'),
-            saida: reserva.saida.split('T').join('T')
-        });
-        const parkingLot = parkingLots.find(lot => lot.name === reserva.local);
-        const hourlyRate = parkingLot ? parkingLot.hourlyRate : 0;
-        setValorTotal(calcularValorTotal(reserva.entrada, reserva.saida, hourlyRate));
-    };
-
-    const handleEditChange = (e) => {
-        setEditForm({
-            ...editForm,
-            [e.target.name]: e.target.value
-        });
-    };
-
-    const handleEditSubmit = async (e) => {
-        e.preventDefault();
-
-        if (!editForm.entrada || !editForm.saida) {
-            console.error("Entrada e saída são obrigatórias.");
-            return;
-        }
-
-        try {
-            const userRef = doc(db, "Users", currentUser.uid);
-            const userDoc = await getDoc(userRef);
-
-            if (userDoc.exists()) {
-                const reservasAtualizadas = userDoc.data().reservas.map(reserva =>
-                    reserva.id === reservaEditando.id
-                        ? {
-                            ...reserva,
-                            ...editForm,
-                            entrada: new Date(editForm.entrada).toISOString(),
-                            saida: new Date(editForm.saida).toISOString(),
-                            valorTotal: valorTotal
-                        }
-                        : reserva
-                );
-                await updateDoc(userRef, { reservas: reservasAtualizadas });
-                setReservas(reservasAtualizadas);
-                setReservaEditando(null);
-            } else {
-                console.error("Documento do usuário não encontrado.");
-            }
-        } catch (error) {
-            console.error("Erro ao editar reserva: ", error);
-        }
-    };
-
     const handleDelete = async (id) => {
         try {
             const userRef = doc(db, "Users", currentUser.uid);
@@ -170,6 +115,21 @@ function Reservas() {
         } catch (error) {
             console.error("Erro ao excluir reserva: ", error);
         }
+    };
+
+    const openModal = (id) => {
+        setReservationId(id);
+        setShowModal(true);
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+        setReservationId(null);
+    };
+
+    const confirmDelete = () => {
+        handleDelete(reservationId);
+        closeModal();
     };
 
     const formatDateTime = (dateTimeString) => {
@@ -237,8 +197,9 @@ function Reservas() {
                                         <td>{formatDateTime(reserva.saida)}</td>
                                         <td>R$ {valorTotal.toFixed(2)}</td>
                                         <td>
-                                            <button onClick={() => handleEdit(reserva)}><img src={iconEdit} height={"30px"} /></button>
-                                            <button onClick={() => handleDelete(reserva.id)}><img src={iconDelete} height={"30px"} /></button>
+                                            <button onClick={() => openModal(reserva.id)}>
+                                                <FcCancel className={Styles.IconDelete} /> {/* Ícone de deletar */}
+                                            </button>                                       
                                         </td>
                                     </tr>
                                 );
@@ -252,65 +213,20 @@ function Reservas() {
                     </div>
                 )}
 
-                {reservaEditando && (
-                    <>
-                        <div className={Styles.Overlay} onClick={() => setReservaEditando(null)} />
-                        <div className={Styles.Modal}>
-                            <h3>Editar Reserva</h3>
-                            <form onSubmit={handleEditSubmit}>
-                                <div className={Styles.InputGroup}>
-                                    <label htmlFor="placa">Placa do Veículo:</label>
-                                    <input
-                                        type="text"
-                                        id="placa"
-                                        name="placa"
-                                        value={editForm.placa}
-                                        onChange={handleEditChange}
-                                    />
-                                </div>
-                                <div className={Styles.InputGroup}>
-                                    <label htmlFor="local">Local:</label>
-                                    <select
-                                        id="local"
-                                        name="local"
-                                        value={editForm.local}
-                                        onChange={handleEditChange}
-                                    >
-                                        {parkingLots.map((lot, index) => (
-                                            <option key={index} value={lot.name}>{lot.name}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div className={Styles.InputGroup}>
-                                    <label htmlFor="entrada">Entrada:</label>
-                                    <input
-                                        type="datetime-local"
-                                        id="entrada"
-                                        name="entrada"
-                                        value={editForm.entrada}
-                                        onChange={handleEditChange}
-                                    />
-                                </div>
-                                <div className={Styles.InputGroup}>
-                                    <label htmlFor="saida">Saída:</label>
-                                    <input
-                                        type="datetime-local"
-                                        id="saida"
-                                        name="saida"
-                                        value={editForm.saida}
-                                        onChange={handleEditChange}
-                                    />
-                                </div>
-                                <div className={Styles.InputGroup}>
-                                    <label htmlFor="valorTotal">Valor Total Estimado:</label>
-                                    <span id="valorTotal">R$ {valorTotal.toFixed(2)}</span>
-                                </div>
-
-                                <button type="submit">Salvar</button>
-                                <button type="button" onClick={() => setReservaEditando(null)}>Cancelar</button>
-                            </form>
+                {/* Modal de confirmação */}
+                {showModal && (
+                    <div className={Styles.Overlay}>
+                        <div className={Styles.ModalReserva}>
+                            <h2>Confirmar Cancelamento</h2>
+                            <p>Tem certeza de que deseja cancelar esta reserva?</p>
+                            <button type="button" onClick={confirmDelete}>
+                                Confirmar
+                            </button>
+                            <button type="button" onClick={closeModal}>
+                                Cancelar
+                            </button>
                         </div>
-                    </>
+                    </div>
                 )}
             </main>
         </div>

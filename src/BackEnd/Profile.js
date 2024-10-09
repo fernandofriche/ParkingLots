@@ -1,6 +1,6 @@
 // src/BackEnd/Profile.js
 import { auth, db } from '../Services/firebaseConfig';
-import { doc, getDoc, deleteDoc } from 'firebase/firestore';
+import { doc, getDoc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { reauthenticateWithCredential, EmailAuthProvider } from 'firebase/auth';
 
 class ProfileService {
@@ -31,7 +31,17 @@ class ProfileService {
         await reauthenticateWithCredential(usuario, credencial);
         await usuario.updatePassword(novaSenha);
     }
+
+    async updateUserProfile(nomeCompleto, email) {
+        const usuario = auth.currentUser;
+        if (!usuario) throw new Error('Usuário não autenticado.');
+
+        const userDocRef = doc(db, 'Users', usuario.uid);
+        await updateDoc(userDocRef, {
+            nomeCompleto: nomeCompleto,
+            email: email
+        });
+    }
 }
 
 export default new ProfileService();
-
