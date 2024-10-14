@@ -520,3 +520,62 @@ button[type="submit"]:focus {
     border: 1px solid #ddd;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
+
+.RadioGroup {
+    display: flex;
+    flex-direction: row; /* Change to column for vertical alignment */
+    gap: 10px; /* Spacing between radio buttons */
+    align-items: center; /* Vertically aligns the label with the radio button */
+  }
+  
+  .RadioGroup label {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  .RadioGroup input[type="radio"] {
+    margin-right: 5px; 
+  }
+  
+  div p.Desconto {
+    color: red;
+  } 
+ 
+.ContainerInformacoes {
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: space-between;
+    align-items: center;
+    width: 97.7%;
+  }
+  
+  .InformacaoEsquerda {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .InformacaoDireita {
+    text-align: right; 
+    font-weight: bold;
+  }
+  
+  .Desconto {
+    color: red;
+    font-weight: bold;
+  }
+  
+  @media (max-width: 600px) {
+    .ContainerInformacoes {
+      flex-direction: column; 
+      text-align: center; 
+    }
+  
+    .InformacaoDireita {
+      text-align: center;
+    }
+  }
+  
+  

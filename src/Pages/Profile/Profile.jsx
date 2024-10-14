@@ -208,7 +208,7 @@ function Profile() {
                                 <hr />
                                 <p><strong>Email: </strong>{detalhesUsuario?.email}</p>
                                 <hr />
-                                <button className={Styles.attPerfil} onClick={() => setIsEditing(true)}>Editar</button>
+                                {/* <button className={Styles.attPerfil} onClick={() => setIsEditing(true)}>Editar</button> */}
                             </div>
                         )
                     )}

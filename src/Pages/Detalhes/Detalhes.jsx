@@ -14,18 +14,19 @@ function Detalhes() {
     const { id } = useParams();
     const navigate = useNavigate();
     const currentUser = auth.currentUser;
-    const [currentStep, setCurrentStep] = useState(1); // Track the step in the payment process //new
+    const [currentStep, setCurrentStep] = useState(1);
     const [parkingLot, setParkingLot] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [nome, setNome] = useState("");
-    const [email, setEmail] = useState(""); //new
-    const [paymentMethod, setPaymentMethod] = useState(""); //new
-    const [cardNumber, setCardNumber] = useState(""); //new
-    const [cardHolder, setCardHolder] = useState(""); //new
-    const [expiryDate, setExpiryDate] = useState(""); //new
-    const [cvv, setCvv] = useState(""); //new
-    const [isPurchaseConfirmed, setIsPurchaseConfirmed] = useState(false); //new
+    const [email, setEmail] = useState("");
+    const [paymentMethod, setPaymentMethod] = useState("");
+    const [cardNumber, setCardNumber] = useState("");
+    const [cardHolder, setCardHolder] = useState("");
+    const [expiryDate, setExpiryDate] = useState("");
+    const [valorTotal, setValorTotal] = useState(0);
+    const [cvv, setCvv] = useState("");
+    const [isPurchaseConfirmed, setIsPurchaseConfirmed] = useState(false);
     const [cidade, setCidade] = useState("");
     const [telefone, setTelefone] = useState("");
     const [cpf, setCpf] = useState("");
@@ -37,6 +38,8 @@ function Detalhes() {
     const [isMercosul, setIsMercosul] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [isValid, setIsValid] = useState(true);
+    const [tipoReserva, setTipoReserva] = useState("hora");
+
 
 
     useEffect(() => {
@@ -63,10 +66,8 @@ function Detalhes() {
         const value = e.target.value;
         setCpf(value);
 
-        // Remove os caracteres não numéricos para validação
         const cpfNumbersOnly = value.replace(/\D/g, '');
 
-        // Verifica se o nono dígito é 6 (pertence a MG)
         if (cpfNumbersOnly.length === 11 && cpfNumbersOnly[8] !== '6') {
             setIsValid(false);
         } else {
@@ -78,7 +79,6 @@ function Detalhes() {
         const placaInput = e.target.value.toUpperCase();
         setPlaca(placaInput);
 
-        // Verificar se a placa tem exatamente 7 caracteres
         if (placaInput.length === 7) {
             setPlacaValida(true);
         } else {
@@ -88,35 +88,31 @@ function Detalhes() {
 
     const formatarDataHora = (data) => {
         const date = new Date(data);
-        const horas = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Formato hh:mm
-        const dataFormatada = date.toLocaleDateString('pt-BR'); // Formato dd/mm/aaaa
+        const horas = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const dataFormatada = date.toLocaleDateString('pt-BR');
         return `${horas} ${dataFormatada}`;
     };
-    
+
 
     const validarStep1 = () => {
         if (!nome || !telefone || !cpf) {
             alert("Preencha todos os dados pessoais para continuar.");
             return false;
         }
-    
+
         if (!isValid) {
             alert("O CPF deve ser de Minas Gerais.");
-            return false; 
+            return false;
         }
         return true;
     };
-    
+
     const validarStep2 = () => {
-        // Verifique se a placa é válida
         if (placa.length !== 7) {
             alert("A placa deve ter exatamente 7 caracteres.");
-            return false; // impede de prosseguir se a placa não for válida
+            return false;
         }
-
-        // Adicione outras validações que você precisa aqui
-
-        return true; // Se todas as validações passarem
+        return true;
     };
 
     const validarStep3 = () => {
@@ -124,6 +120,28 @@ function Detalhes() {
             alert("Preencha os horários de entrada e saída para continuar.");
             return false;
         }
+
+        const horaEntrada = new Date(entrada);
+        const horaSaida = new Date(saida);
+        const diferencaMs = horaSaida - horaEntrada;
+        const diferencaHoras = diferencaMs / (1000 * 60 * 60);
+        const diferencaDias = diferencaMs / (1000 * 60 * 60 * 24);
+
+        if (horaEntrada.getTime() <= new Date().getTime()) {
+            alert("O horário de entrada não pode ser no passado.");
+            return false;
+        }
+
+        if (horaSaida <= horaEntrada) {
+            alert("O horário de saída deve ser posterior ao de entrada.");
+            return false;
+        }
+
+        if (diferencaHoras === 0) {
+            alert("O horário de entrada não pode ser igual ao de saída.");
+            return false;
+        }
+
         return true;
     };
 
@@ -135,9 +153,6 @@ function Detalhes() {
         return true;
     };
 
-
-
-    // Atualiza Barra de Progresso
     const progressBarWidth = () => {
         switch (currentStep) {
             case 1:
@@ -167,26 +182,80 @@ function Detalhes() {
         }
     };
 
-
     const confirmPurchase = () => {
         setShowModal(true);
     };
 
-
-    const calcularValorTotal = (entrada, saida, hourlyRate) => {
+    const calcularValorTotal = (entrada, saida, rate) => {
         if (!entrada || !saida) return 0;
 
         const horaEntrada = new Date(entrada);
         const horaSaida = new Date(saida);
 
-        if (horaSaida <= horaEntrada) {
-            horaSaida.setDate(horaSaida.getDate() + 1);
+        const diferencaMs = horaSaida - horaEntrada;
+        const diferencaDias = Math.ceil(diferencaMs / (1000 * 60 * 60 * 24));
+
+        if (tipoReserva === 'hora') {
+            const diferencaHoras = diferencaMs / (1000 * 60 * 60);
+
+            if (diferencaDias > 1) {
+                alert('Para o tipo de reserva por hora, a data de saída não pode ultrapassar o mesmo dia.');
+                return 0;
+            }
+            return diferencaHoras * rate;
+
         }
 
-        const diferencaHoras = (horaSaida - horaEntrada) / (1000 * 60 * 60);
-
-        return diferencaHoras * hourlyRate;
+        return 0;
     };
+
+    const handleSaidaChange = (e) => {
+        const saidaValue = e.target.value;
+        const horaEntrada = new Date(entrada);
+        const horaSaida = new Date(saidaValue);
+        const diferencaMs = horaSaida - horaEntrada;
+        const diferencaHoras = diferencaMs / (1000 * 60 * 60);
+        const diferencaDias = Math.ceil(diferencaMs / (1000 * 60 * 60 * 24));
+
+        // Verifica se a saída é menor que a entrada
+        if (horaSaida <= horaEntrada) {
+            alert("O horário de saída deve ser posterior ao de entrada.");
+            setSaida('');
+            return;
+        }
+
+        // Atualiza o tipo de reserva baseado na lógica
+        if (diferencaDias > 1) {
+            setTipoReserva('diaria');
+        } else if (diferencaHoras > 3) {
+            setTipoReserva('diaria');
+        } else {
+            setTipoReserva('hora');
+        }
+
+        setSaida(saidaValue);
+    };
+
+
+    const calcularDesconto = (entrada, saida, hourlyRate, dailyRate) => {
+        const horaEntrada = new Date(entrada);
+        const horaSaida = new Date(saida);
+        const diferencaMs = horaSaida - horaEntrada;
+        const diferencaHoras = diferencaMs / (1000 * 60 * 60);
+        const diferencaDias = Math.ceil(diferencaMs / (1000 * 60 * 60 * 24));
+
+        let valorHoras = diferencaHoras * hourlyRate;
+        let valorTotal = valorHoras;
+        let desconto = 0;
+
+        if (diferencaDias > 1 || diferencaHoras > 3) {
+            valorTotal = dailyRate * diferencaDias;
+            desconto = valorHoras - valorTotal;
+        }
+
+        return { valorHoras, desconto, valorTotal };
+    };
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -202,7 +271,6 @@ function Detalhes() {
             return;
         }
 
-        // Exibir o modal de confirmação antes de prosseguir
         setShowModal(true);
     };
 
@@ -239,6 +307,7 @@ function Detalhes() {
         }
     };
 
+
     const closeModal = () => {
         setShowModal(false);
     };
@@ -247,15 +316,14 @@ function Detalhes() {
         const currentDate = new Date();
         const currentMonth = currentDate.getMonth() + 1;
         const currentYear = currentDate.getFullYear() % 100;
-    
+
         const [enteredMonth, enteredYear] = date.split('/').map(Number);
-    
-        // Verifique se o mês está acima de 12
+
         if (enteredMonth < 1 || enteredMonth > 12) {
             setError('Mês inválido.');
-            return; // Saia da função se o mês for inválido
+            return;
         }
-    
+
         if (enteredYear < currentYear) {
             setError('Ano inválido.');
         } else if (enteredYear === currentYear && enteredMonth < currentMonth) {
@@ -264,16 +332,16 @@ function Detalhes() {
             setError(null);
         }
     };
-    
+
     const handleExpiryDateChange = (e) => {
         const newValue = e.target.value;
         setExpiryDate(newValue);
-    
+
         if (newValue.length === 5) {
             validateExpiryDate(newValue);
         }
     };
-    
+
     return (
         <div>
             <header className={Styles.Cabecalho}>
@@ -306,7 +374,7 @@ function Detalhes() {
                         <h2>{parkingLot.name}</h2>
                         <p>{parkingLot.description}</p>
                         <hr />
-                        <p>Valor da hora: R$ {parkingLot.hourlyRate.toFixed(2)}</p>
+                        <p>Valor da hora: R$   {parkingLot.hourlyRate.toFixed(2)} || Valor da diária: R$ {parkingLot.dailyRate.toFixed(2)}</p>
 
                         <form className={Styles.Form} onSubmit={handleSubmit}></form>
 
@@ -358,7 +426,7 @@ function Detalhes() {
                                             {(inputProps) => (
                                                 <input
                                                     {...inputProps}
-                                                    className={isValid ? '' : 'input-error'} // Adiciona uma classe de erro se CPF for inválido
+                                                    className={isValid ? '' : 'input-error'}
                                                 />
                                             )}
                                         </InputMask>
@@ -398,7 +466,7 @@ function Detalhes() {
 
                                     </div>
                                 </div>
-                               
+
                                 <button type="button" className={Styles.ButtonDetalhes} onClick={handlePreviousStep}>Voltar</button>
                                 <button type="button" className={Styles.ButtonDetalhes} onClick={() => { if (validarStep2()) handleNextStep(); }}>
                                     Prosseguir
@@ -409,6 +477,31 @@ function Detalhes() {
                         {currentStep === 3 && (
                             <fieldset className={Styles.Fieldset}>
                                 <legend>3. Informações da Reserva</legend>
+
+
+                                <div className={Styles.RadioGroup}>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="tipoReserva"
+                                            value="hora"
+                                            checked={tipoReserva === 'hora'}
+                                            readOnly
+                                        />
+                                        Hora
+                                    </label>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="tipoReserva"
+                                            value="diaria"
+                                            checked={tipoReserva === 'diaria'}
+                                            readOnly
+                                        />
+                                        Diária
+                                    </label>
+                                </div>
+
                                 <div className={Styles.InputGroupHorizontal}>
                                     <div>
                                         <label htmlFor="entrada">Entrada:</label>
@@ -419,6 +512,8 @@ function Detalhes() {
                                             required
                                             value={entrada}
                                             min={new Date().toISOString().slice(0, 16)}
+                                            step="1800" // Limita a seleção de horário para intervalos de 30 minutos
+
                                             onChange={(e) => {
                                                 setEntrada(e.target.value);
                                                 setSaida('');
@@ -434,29 +529,47 @@ function Detalhes() {
                                             required
                                             value={saida}
                                             min={entrada || new Date().toISOString().slice(0, 16)}
-                                            onChange={(e) => {
-                                                const saidaValue = e.target.value;
-                                                if (new Date(saidaValue) <= new Date(entrada)) {
-                                                    alert('O horário de saída deve ser maior que o horário de entrada!');
-                                                    e.target.value = '';
-                                                } else {
-                                                    setSaida(saidaValue);
-                                                }
-                                            }}
+                                            step="1800" // Limita a seleção de horário para intervalos de 30 minutos
+
+                                            onChange={handleSaidaChange}
                                         />
                                     </div>
                                 </div>
 
                                 {entrada && saida && (
-                                    <p>Valor Total: R$ {calcularValorTotal(
-                                        entrada,
-                                        saida,
-                                        parkingLot.hourlyRate
-                                    ).toFixed(2)}</p>
+                                    (() => {
+                                        const { valorHoras, desconto, valorTotal } = calcularDesconto(
+                                            entrada,
+                                            saida,
+                                            parkingLot.hourlyRate,
+                                            parkingLot.dailyRate
+                                        );
+
+                                        return (
+                                            <div className={Styles.ContainerInformacoes}>
+                                                {/* Parte esquerda: Valor das horas e Desconto */}
+                                                <div className={Styles.InformacaoEsquerda}>
+                                                    <p>Valor das Horas: R$ {valorHoras.toFixed(2)}</p>
+                                                    {desconto > 0 && <p className={Styles.Desconto}>Desconto: R$ {desconto.toFixed(2)}</p>}
+                                                </div>
+
+                                                {/* Parte direita: Total a Pagar */}
+                                                <div className={Styles.InformacaoDireita}>
+                                                    <p>Total a Pagar: R$ {valorTotal.toFixed(2)}</p>
+                                                </div>
+                                            </div>
+                                        );
+                                    })()
                                 )}
 
                                 <button type="button" className={Styles.ButtonDetalhes} onClick={handlePreviousStep}>Voltar</button>
-                                <button type="button" className={Styles.ButtonDetalhes} onClick={() => { if (validarStep3()) handleNextStep(); }}>Prosseguir</button>
+                                <button
+                                    type="button"
+                                    className={Styles.ButtonDetalhes}
+                                    onClick={() => { if (validarStep3()) handleNextStep(); }}
+                                >
+                                    Prosseguir
+                                </button>
                             </fieldset>
                         )}
 
@@ -536,7 +649,7 @@ function Detalhes() {
                                 </div>
 
                                 {entrada && saida && (
-                                    <p>Valor Total da Reserva: R$ {calcularValorTotal(entrada, saida, parkingLot.hourlyRate).toFixed(2)}</p>
+                                    <p>Valor Total da Reserva: R$ {valorTotal.toFixed(2)}</p>
                                 )}
 
                                 <button type="button" className={Styles.ButtonDetalhes} onClick={handlePreviousStep}>Voltar</button>
@@ -546,22 +659,22 @@ function Detalhes() {
 
                         {currentStep === 5 && (
                             <fieldset>
-                            <div className={Styles.Form}>
-                                <legend>5. Confirmação de Reserva</legend>
-                                {isPurchaseConfirmed ? (
-                                    <div className={Styles.Confirmation}>
-                                        <div className={Styles.CheckIcon}></div>
-                                        <p>Reserva Confirmada!</p>
-                                    </div>
-                                ) : (
-                                    <div>
-                                        <label>Revise sua reserva antes de confirmar.</label>
-                                        <br />
-                                        <button type="button" className={Styles.ButtonDetalhes} onClick={handlePreviousStep}>Voltar</button>
-                                        <button type="button" className={Styles.ButtonDetalhes} onClick={confirmPurchase}>Revisar Reserva</button>
-                                    </div>
-                                )}
-                            </div>
+                                <div className={Styles.Form}>
+                                    <legend>5. Confirmação de Reserva</legend>
+                                    {isPurchaseConfirmed ? (
+                                        <div className={Styles.Confirmation}>
+                                            <div className={Styles.CheckIcon}></div>
+                                            <p>Reserva Confirmada!</p>
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            <label>Revise sua reserva antes de confirmar.</label>
+                                            <br />
+                                            <button type="button" className={Styles.ButtonDetalhes} onClick={handlePreviousStep}>Voltar</button>
+                                            <button type="button" className={Styles.ButtonDetalhes} onClick={confirmPurchase}>Revisar Reserva</button>
+                                        </div>
+                                    )}
+                                </div>
                             </fieldset>
                         )}
                     </div>
@@ -570,47 +683,47 @@ function Detalhes() {
 
             {/* Modal de confirmação */}
             {showModal && (
-    <div className={Styles.ModalConfirma}>
-        <div className={Styles.ModalContent}>
-            <h2>Atenção!</h2>
-            <p className={Styles.Aviso}>Revise as informações inseridas! Após a confirmação, os dados não poderão ser alterados.</p>
+                <div className={Styles.ModalConfirma}>
+                    <div className={Styles.ModalContent}>
+                        <h2>Atenção!</h2>
+                        <p className={Styles.Aviso}>Revise as informações inseridas! Após a confirmação, os dados não poderão ser alterados.</p>
 
-            {/* Container das informações */}
-            <div className={Styles.InfoContainer}>
-                <div className={Styles.InfoRow}>
-                    <span className={Styles.Label}>Nome:</span>
-                    <span className={Styles.Value}>{nome}</span>
-                </div>
-                <div className={Styles.InfoRow}>
-                    <span className={Styles.Label}>Telefone:</span>
-                    <span className={Styles.Value}>{telefone}</span>
-                </div>
-                <div className={Styles.InfoRow}>
-                    <span className={Styles.Label}>Placa do Veículo:</span>
-                    <span className={Styles.Value}>{placa}</span>
-                </div>
-                <div className={Styles.InfoRow}>
-                    <span className={Styles.Label}>Entrada:</span>
-                    <span className={Styles.Value}>{formatarDataHora(entrada)}</span>
-                </div>
-                <div className={Styles.InfoRow}>
-                    <span className={Styles.Label}>Saída:</span>
-                    <span className={Styles.Value}>{formatarDataHora(saida)}</span>
-                </div>
-                <div className={Styles.InfoRow}>
-                    <span className={Styles.Label}>Valor Total:</span>
-                    <span className={Styles.Value}>R$ {calcularValorTotal(entrada, saida, parkingLot.hourlyRate).toFixed(2)}</span>
-                </div>
-            </div>
+                        {/* Container das informações */}
+                        <div className={Styles.InfoContainer}>
+                            <div className={Styles.InfoRow}>
+                                <span className={Styles.Label}>Nome:</span>
+                                <span className={Styles.Value}>{nome}</span>
+                            </div>
+                            <div className={Styles.InfoRow}>
+                                <span className={Styles.Label}>Telefone:</span>
+                                <span className={Styles.Value}>{telefone}</span>
+                            </div>
+                            <div className={Styles.InfoRow}>
+                                <span className={Styles.Label}>Placa do Veículo:</span>
+                                <span className={Styles.Value}>{placa}</span>
+                            </div>
+                            <div className={Styles.InfoRow}>
+                                <span className={Styles.Label}>Entrada:</span>
+                                <span className={Styles.Value}>{formatarDataHora(entrada)}</span>
+                            </div>
+                            <div className={Styles.InfoRow}>
+                                <span className={Styles.Label}>Saída:</span>
+                                <span className={Styles.Value}>{formatarDataHora(saida)}</span>
+                            </div>
+                            <div className={Styles.InfoRow}>
+                                <span className={Styles.Label}>Valor Total:</span>
+                                <span className={Styles.Value}>R$ {calcularValorTotal(entrada, saida, parkingLot.hourlyRate).toFixed(2)}</span>
+                            </div>
+                        </div>
 
-            {/* Botões de confirmação */}
-            <div className={Styles.ModalButtons}>
-                <button onClick={ConfirmarReserva}>Confirmar</button>
-                <button onClick={closeModal}>Cancelar</button>
-            </div>
-        </div>
-    </div>
-)}
+                        {/* Botões de confirmação */}
+                        <div className={Styles.ModalButtons}>
+                            <button onClick={ConfirmarReserva}>Confirmar</button>
+                            <button onClick={closeModal}>Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
         </div>
     );
