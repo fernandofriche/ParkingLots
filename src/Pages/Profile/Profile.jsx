@@ -1,5 +1,3 @@
-// src/components/Profile.js
-
 import React, { useState, useEffect } from 'react';
 import Styles from './Profile.module.css';
 import { ToastContainer, toast } from 'react-toastify';
@@ -15,6 +13,7 @@ import iconProfile from '../../assets/Images/iconProfile.png';
 import iconHistorico from '../../assets/Images/iconHistorico.png';
 import iconPassword from '../../assets/Images/iconPassword.png';
 import iconCars from '../../assets/Images/iconCars.png';
+import Reservas from '../Reservas/Reservas'; // Importando o componente Reservas
 
 function Profile() {
     const [detalhesUsuario, setDetalhesUsuario] = useState(null);
@@ -34,6 +33,7 @@ function Profile() {
     const [mostrarCarros, setMostrarCarros] = useState(false);
     const [mostrarInfoUsuario, setMostrarInfoUsuario] = useState(true);
     const [mostrarSenha, setMostrarSenha] = useState(false);
+    const [mostrarReservas, setMostrarReservas] = useState(false); // Estado para mostrar as reservas
 
     const navigate = useNavigate();
 
@@ -49,18 +49,28 @@ function Profile() {
         setMostrarCarros(!mostrarCarros);
         setMostrarInfoUsuario(false); // Oculta a exibição das informações do usuário
         setMostrarSenha(false); // Oculta a exibição da senha
+        setMostrarReservas(false); // Oculta a exibição das reservas
     };
 
     const exibirInfoUsuario = () => {
         setMostrarInfoUsuario(true);
         setMostrarCarros(false);
         setMostrarSenha(false); // Oculta a exibição da senha
+        setMostrarReservas(false); // Oculta a exibição das reservas
     };
 
     const exibirSenha = () => {
         setMostrarSenha(true); // Exibe as informações da senha
         setMostrarCarros(false); // Oculta a exibição dos carros
         setMostrarInfoUsuario(false); // Oculta as informações do usuário
+        setMostrarReservas(false); // Oculta a exibição das reservas
+    };
+
+    const exibirReservas = () => {
+        setMostrarReservas(true); // Exibe as reservas
+        setMostrarCarros(false); // Oculta a exibição dos carros
+        setMostrarInfoUsuario(false); // Oculta as informações do usuário
+        setMostrarSenha(false); // Oculta a exibição da senha
     };
 
     const dataBaseUsuario = async () => {
@@ -143,6 +153,21 @@ function Profile() {
         }
     };
 
+    // Função para deletar carro
+    const handleDeleteCar = async (carroId) => {
+        const confirmado = window.confirm('Tem certeza que deseja deletar este carro?');
+        if (confirmado) {
+            try {
+                await VisualizarCarsController.deleteCar(carroId); // Certifique-se de que você tenha este método no seu controlador
+                toast.success('Carro deletado com sucesso!', { position: "top-center" });
+                buscarCarros(); // Atualiza a lista de carros
+            } catch (error) {
+                console.error('Erro ao deletar carro:', error);
+                toast.error('Erro ao deletar o carro. Tente novamente.', { position: "top-center" });
+            }
+        }
+    };
+
     return (
         <>
             <ToastContainer />
@@ -168,7 +193,7 @@ function Profile() {
                 <aside className={Styles.sidebar}>
                     <ul className={Styles.menu}>
                         <li><button onClick={exibirInfoUsuario}><img src={iconProfile} /> Perfil</button></li>
-                        <li><button><img src={iconHistorico} /> Histórico</button></li>
+                        <li><button onClick={exibirReservas}><img src={iconHistorico} /> Histórico</button></li>
                         <li><button onClick={exibirSenha}><img src={iconPassword} /> Alterar Senha</button></li>
                         <li><button onClick={alternarMostrarCarros}><img src={iconCars} /> Veículos</button></li>
                         <li><button onClick={Sair}>Sair</button></li>
@@ -207,37 +232,42 @@ function Profile() {
                                 <p><strong>Nome Completo: </strong>{detalhesUsuario?.nomeCompleto}</p>
                                 <hr />
                                 <p><strong>Email: </strong>{detalhesUsuario?.email}</p>
-                                <hr />
-                                {/* <button className={Styles.attPerfil} onClick={() => setIsEditing(true)}>Editar</button> */}
+                                <button className={Styles.editButton} onClick={() => setIsEditing(true)}>Editar</button>
                             </div>
                         )
                     )}
 
                     {mostrarCarros && (
-                        <div className={Styles.carrosContainer}>
-                            <h3>Seus Veículos Registrados</h3>
-                            <div className={Styles.carrosBox}> {/* Caixa para os carros */}
+                        <div>
+                            <h2>Meus Carros</h2>
+                            <div className={Styles.carrosContainer}>
                                 {carros.length > 0 ? (
-                                    carros.map((carro, index) => (
-                                        <div key={index} className={Styles.carroCard}> {/* Card individual para cada carro */}
-                                            <p><strong>Modelo: </strong>{carro.modelo}</p>
-                                            <p><strong>Placa: </strong>{carro.placa}</p>
+                                    carros.map((carro) => (
+                                        <div className={Styles.carroCard} key={carro.id}>
+                                            <div className={Styles.carroInfo}>
+                                                <p>Marca: {carro.marca}</p>
+                                                <p>Modelo: {carro.modelo}</p>
+                                            </div>
+                                            <button onClick={() => handleDeleteCar(carro.id)}>Deletar Carro</button>
                                         </div>
                                     ))
                                 ) : (
-                                    <p>Você não possui veículos registrados.</p>
+                                    <p>Nenhum carro cadastrado.</p>
                                 )}
                             </div>
                         </div>
                     )}
 
+
+
+
                     {mostrarSenha && (
-                        <div className={Styles.senha}>
+                        <div>
                             <h2>Alterar Senha</h2>
                             <label>
                                 Senha Atual:
                                 <input
-                                    type={senhaVisivel.atual ? 'text' : 'password'}
+                                    type={senhaVisivel.atual ? "text" : "password"}
                                     value={senhaAtual}
                                     onChange={(e) => setSenhaAtual(e.target.value)}
                                 />
@@ -248,7 +278,7 @@ function Profile() {
                             <label>
                                 Nova Senha:
                                 <input
-                                    type={senhaVisivel.nova ? 'text' : 'password'}
+                                    type={senhaVisivel.nova ? "text" : "password"}
                                     value={novaSenha}
                                     onChange={(e) => setNovaSenha(e.target.value)}
                                 />
@@ -259,7 +289,7 @@ function Profile() {
                             <label>
                                 Confirmar Nova Senha:
                                 <input
-                                    type={senhaVisivel.confirmar ? 'text' : 'password'}
+                                    type={senhaVisivel.confirmar ? "text" : "password"}
                                     value={confirmarNovaSenha}
                                     onChange={(e) => setConfirmarNovaSenha(e.target.value)}
                                 />
@@ -267,7 +297,14 @@ function Profile() {
                                     {senhaVisivel.confirmar ? <FaEyeSlash /> : <FaEye />}
                                 </button>
                             </label>
-                            <button onClick={AtualizarSenha}>Salvar Nova Senha</button>
+                            <button onClick={AtualizarSenha}>Salvar Senha</button>
+                        </div>
+                    )}
+
+                    {mostrarReservas && (
+                        <div>
+                            <h2>Histórico de Reservas</h2>
+                            <Reservas />
                         </div>
                     )}
                 </div>

@@ -1,8 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Londrina+Solid:wght@100;300;400;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Londrina+Solid:wght@100;300;400;900&display=swap');
 
-
-
 /* Estilo da barra lateral */
 .sidebar {
     width: 250px;
@@ -123,29 +121,58 @@
 
 .carrosContainer {
     margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
 .carrosBox {
-    border: 2px solid #ccc; /* Borda do quadrado maior */
-    border-radius: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
     padding: 20px;
-    display: flex; /* Para alinhar os cards em linha */
-    flex-wrap: wrap; /* Para permitir que os cards se movam para a linha seguinte se não houver espaço */
-    gap: 15px; /* Espaço entre os cards */
-    background-color: #f9f9f9; /* Fundo do quadrado maior */
-    max-width: 600px; /* Ajuste conforme necessário */
+    background-color: #f9f9f9;
+    justify-content: flex-start;
+    max-width: 100%;
 }
 
 .carroCard {
-    border: 1px solid #ddd; /* Borda dos cards menores */
-    border-radius: 6px;
-    padding: 10px;
-    width: 150px; /* Largura fixa dos cards */
-    background-color: #fff; /* Fundo dos cards menores */
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Sombra leve para destaque */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    width: 180px;
+    background-color: white;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
 }
 
+.carroInfo {
+    margin-bottom: 10px;
+}
 
+.carroCard p {
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.carroCard button {
+    padding: 5px 10px;
+    background-color: #FF0000;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.carroCard button:hover {
+    background-color: #cc0000;
+}
 
 .passwordContainer {
     display: flex;
@@ -168,7 +195,6 @@
     cursor: pointer;
 }
 
-/* Botões de ação no modal */
 .attButton, .cancelButton {
     background-color: #007bff;
     color: white;
@@ -192,7 +218,6 @@
     background-color: #c82333;
 }
 
-/* Estilo para o botão que abre o modal */
 .openModalButton {
     background-color: #007bff;
     color: white;
@@ -246,12 +271,9 @@
     color: black;
     font-family: 'Londrina Solid', sans-serif;
     font-weight: 400;
-    margin-top: 5%; /* Ajuste a margem conforme necessário */
+    margin-top: 5%;
     text-align: center;
 }
-
-
-/* header config */
 
 .Cabecalho {
     width: 100%;
@@ -261,7 +283,6 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     transition: background-color 0.3s ease;
 }
-
 
 .Cabecalho ul {
     display: flex;
@@ -286,7 +307,6 @@
     width: 120px;
     transition: transform 0.3s ease;
 }
-
 
 .UserIcon {
     width: 50px;
