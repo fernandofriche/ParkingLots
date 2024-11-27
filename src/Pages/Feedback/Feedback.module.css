@@ -1,51 +1,144 @@
-.feedbackContainer {
-    width: 80%;
-    max-width: 600px;
-    margin: auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+.Cabecalho {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    height: 70px;
+    z-index: 99;
+    background-color: #277D8E;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    padding: 10px 0;
+    transition: background-color 0.3s ease;
+}
+.DivLista {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.feedbackForm {
+.Cabecalho ul {
+    display: flex;
+    align-items: center;
+    gap: 190px;
+    list-style: none;
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    color: white;
+    padding: 0 2%;
+}
+
+.Cabecalho ul a {
+    text-decoration: none;
+    color: white;
+    transition: color 0.3s ease;
+}
+
+.Cabecalho img.Logo {
+    width: 120px;
+    transition: transform 0.3s ease;
+}
+.FeedbackMainContent {
+    margin-top: 100px;
+    padding: 50px 20px;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    min-height: calc(100vh - 70px);
 }
 
-.ratingContainer {
+.Title {
+    color: #277D8E;
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
     display: flex;
-    margin-bottom: 10px;
+    align-items: center;
+    gap: 10px;
 }
 
-.filledStar {
-    color: gold;
-    cursor: pointer;
-}
-
-.emptyStar {
-    color: lightgray;
-    cursor: pointer;
-}
-
-.commentInput {
+.FormContainer {
     width: 100%;
-    height: 100px;
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
+    max-width: 400px;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.FormGroup {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.FormGroup label {
+    font-weight: bold;
+    color: #555;
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    text-align: left;
+}
+
+.FormGroup input,
+.FormGroup select,
+.FormGroup textarea {
+    width: 100%;
+    padding: 15px;
+    border: none;
     border-radius: 5px;
+    background: #f0f4f8;
+    font-size: 16px;
+    color: #555;
+    outline: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.feedbackList {
-    margin-top: 20px;
+.FormGroup input:focus,
+.FormGroup select:focus,
+.FormGroup textarea:focus {
+    background-color: #e3f2fd;
+    color: #277D8E;
+    font-weight: bold;
+    border-left: 3px solid #277D8E;
 }
 
-.feedbackItem {
-    border-bottom: 1px solid #eee;
-    padding: 10px 0;
+.SubmitButton {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #277D8E, #1b5d6b);
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background 0.3s ease, transform 0.2s ease;
 }
 
-.feedbackItem:last-child {
-    border-bottom: none;
+.SubmitButton:hover {
+    background: linear-gradient(135deg, #1b5d6b, #277D8E);
+    transform: scale(1.02);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

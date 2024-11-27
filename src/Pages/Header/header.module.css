@@ -1,0 +1,68 @@
+/* Header */
+
+
+@media (max-width: 700px)
+{
+   .esconder-mobile{
+       display: none !important;
+   }
+   header{
+        display: none !important;
+   }
+}
+
+
+.Cabecalho {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    height: 70px;
+    z-index: 99;
+    background-color: #277D8E;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    padding: 10px 0;
+    transition: background-color 0.3s ease;
+}
+
+.DivLista {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Cabecalho ul {
+    display: flex;
+    align-items: center;
+    gap: 190px;
+    list-style: none;
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    color: white;
+    padding: 0 2%;
+}
+
+.Cabecalho ul a {
+    text-decoration: none;
+    color: white;
+    transition: color 0.3s ease;
+}
+
+/* .Cabecalho ul a:hover {
+    color: #1E9E5E;
+} */
+
+.Cabecalho img.Logo {
+    width: 120px;
+    transition: transform 0.3s ease;
+}
+
+.Logo {
+    width: 120px;
+}
+
+.UserIcon {
+    width: 40px;
+}
+
+

@@ -1,4 +1,13 @@
 /* Header */
+
+body{
+    font-family: 'Londrina Solid', sans-serif !important;
+}
+
+h1{
+    font-family: 'Londrina Solid', sans-serif !important;
+}
+
 .Cabecalho {
     position: fixed;
     width: 100%;
@@ -46,220 +55,224 @@
     border-radius: 50%;
     transition: transform 0.3s ease;
 }
+/* Updated Styles for Modern and Attractive Design */
 
 /* Main Content */
 .MainContent {
-    text-align: center;
-    margin-top: 10%;
+    max-width: 1400px;
+    margin: 120px auto 0;
+    padding: 0 20px;
     font-family: "Inter", sans-serif;
-    font-weight: 600;
-    font-size: 24px;
-    color: #333;
-    transition: opacity 0.3s ease;
 }
 
 .MainContent h1 {
-    font-size: 36px;
-    margin-bottom: 20px;
-    color: black;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    color: #1a1a1a;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    animation: fadeIn 1s ease-in-out;
+    letter-spacing: 3px;
+    font-weight: 700;
+    background: linear-gradient(to right, #277D8E, #2ca8c0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
 }
 
-
-/* Animations */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.SearchBarWrapper input::placeholder {
-    color: #8D8D8D;
-}
-
-.SearchBarWrapper input {
-    border: 1.5px solid #277D8E;
+/* Search Bar */
+.SearchBarContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
 }
 
 .SearchBarWrapper {
     position: relative;
-    display: inline-block;
     width: 100%;
-    max-width: 400px;
-    margin-right: 20px; /* Ajuste para dar espaço ao ícone de filtro */
+    max-width: 600px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .SearchBar {
     width: 100%;
-    padding: 12px 40px 12px 20px; /* Espaço maior à direita para ícone de busca */
-    font-size: 16px;
-    border: none;
-    border-radius: 30px;
-    background-color: #f5f5f5;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+    padding: 15px 60px 15px 20px;
+    font-size: 1rem;
+    border: 2px solid #277D8E;
+    border-radius: 50px;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .SearchBar:focus {
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
-    background-color: #ffffff;
     outline: none;
+    border-color: #1c5c6b;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    background-color: white;
 }
 
 .SearchIcon {
     position: absolute;
-    right: 15px; /* Alinhamento à direita dentro do input */
+    right: 50px;
     top: 50%;
     transform: translateY(-50%);
     color: #277D8E;
-    pointer-events: none;
-}
-
-/* Cards */
-.CardContainer {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 30px;
-    animation: fadeIn 1.2s ease-in-out;
-    animation-fill-mode: both;
-    margin-top: 2%;
-}
-
-.Card {
-    background-color: white;
-    border: 2px solid #277D8E;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    text-align: center;
-    width: 250px;
-    color: white;
-    opacity: 0;
-    animation: fadeInUp 0.8s ease forwards;
-    animation-delay: calc(0.1s * var(--i));
-}
-
-.Card h2 {
-    font-size: 22px;
-    margin-bottom: 10px;
-    color: black;
-}
-
-.Card p {
-    font-size: 16px;
-    margin: 5px 0;
-    color: #bbb;
-}
-
-.CardImage {
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-    margin-bottom: 15px;
-}
-
-.Card:hover {
-    transform: scale(1.05);
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
-}
-
-/* Animation for Cards */
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* Button */
-.BtnReserar {
-    display: inline-block;
-    background-color: white;
-    color: #277D8E;
-    border: 2px solid #277D8E;
-    border-radius: 25px;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-top: 10px;
-}
-
-.BtnReserar:active {
-    transform: translateY(0);
+    z-index: 10;
 }
 
 .FilterContainer {
-    right: 20px;
-    top: 150px;
-    z-index: 10;
-    border-radius: 50%; /* Garante o formato de círculo */
-    padding: 10px;
-    width: 50px; /* Defina uma largura e altura iguais */
-    height: 50px;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.CardContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+
+.Card:hover {
+    transform: none;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); 
+}
+
+.CardImage {
+    width: 95%; 
+    height: 320px; 
+    object-fit: cover;
+    transition: transform 0.6s ease;
+    margin: 15px auto; 
+    border-radius: 16px; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+}
+
+.Card:hover .CardImage {
+    transform: scale(1.01);
+}
+
+.Card {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    height: 100%;
+    position: relative;
+    padding-bottom: 15px; 
+}
+
+
+.Card h2 {
+    font-size: 1.2rem;
+    color: #1a1a1a;
+    margin: 15px 20px 10px;
+    font-weight: 600;
+}
+
+.Card p {
+    color: #555;
+    margin: 0 20px 15px;
+    font-size: 1rem;
+}
+
+.IconAddress {
+    position: absolute;
+    top: 25px;
+    left: 20px;
+    background-color: rgba(255,255,255,0.8);
+    border-radius: 50%;
+    padding: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10; 
+}
+
+.BtnReserar {
+    width: calc(100% - 40px);
+    margin: 15px 20px;
+    padding: 12px;
+    background-color: #277D8E;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    transform: translateY(0);
+}
+
+.BtnReserar:hover {
+    background-color: #1c5c6b;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Adjustments */
+@media screen and (max-width: 768px) {
+    .MainContent {
+        margin-top: 90px;
+    }
+
+    .MainContent h1 {
+        font-size: 2rem;
+    }
+
+    .SearchBarWrapper {
+        max-width: 100%;
+        margin: 0 20px;
+    }
+
+    .CardContainer {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .Card {
+        max-width: 100%;
+    }
+}
+
+/* Loading and Error States */
+.LoadingContainer, .ErrorContainer {
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); 
-    transition: all 0.3s ease;
-}
-
-.FilterContainer:hover {
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); 
-}
-
-.FilterIcon {
-    cursor: pointer;
+    height: 300px;
+    font-size: 1.2rem;
     color: #277D8E;
-    font-size: 24px;
+    text-align: center;
 }
 
+/* Filter Dropdown */
 .FilterDropdown {
-    position: absolute;
-    right: 0;
-    top: 35px;
-    background-color: #fff;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    padding: 10px;
-    border-radius: 10px; 
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); 
-    z-index: 10;
-    opacity: 0;
-    transform: translateY(-10px);
-    animation: slideDown 0.3s forwards ease-in-out; 
-}
-
-/* Animação de deslizar */
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 200px;
+    position: relative;
+    left: 212px;
 }
 
 .FilterDropdown button {
-    background: none;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    display: block;
-    text-align: left;
     width: 100%;
+    padding: 12px 20px;
+    text-align: left;
+    transition: all 0.3s ease;
+    border: none;
+    background-color: transparent;
     color: #277D8E;
-    font-size: 16px;
-    transition: background-color 0.3s, color 0.3s ease; 
 }
 
 .FilterDropdown button:hover {
-    background-color: #277D8E; 
-    color: #fff;
-    border-radius: 8px; 
+    background-color: #f0f0f0;
+    color: #1c5c6b;
 }

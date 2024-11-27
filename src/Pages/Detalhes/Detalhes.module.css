@@ -1,11 +1,21 @@
-/* General Styles */
-body {
-    margin: 0;
-    font-family: "Inter", sans-serif;
-    background-color: #f9f9f9;
-    color: #333;
+
+:root {
+    --primary-color: #277D8E;
+    --secondary-color: #23D45F;
+    --background-light: #f4f7f9;
+    --text-dark: #333;
+    --text-light: #555;
+    --border-radius: 12px;
+    --box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
+body {
+    margin: 0;
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-light);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
 /* Header */
 .Cabecalho {
     position: fixed;
@@ -228,8 +238,38 @@ button[type="submit"]:focus {
     margin-top: 20px;
 }
 
-.ModalButtons button {
-    background-color: #277D8E;
+.ModalButtons .ButtonConfirma {
+    background-color: #32c757;
+    border: none;
+    padding: 6px;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.ModalButtons .ButtonConfirma:hover {
+    background-color: #58c78a;
+    border: none;
+    padding: 6px;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.ModalButtons .ButtonCancela {
+    background-color: #c73c32;
+    border: none;
+    padding: 6px;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.ModalButtons .ButtonCancela:hover {
+    background-color: #c75858;
     border: none;
     padding: 6px;
     color: #fff;
@@ -277,26 +317,52 @@ button[type="submit"]:focus {
     color: #353744;
 }
 
+.ModalConfirma {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.ModalContent {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 30px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: var(--box-shadow);
+    text-align: center;
+}
+
 .ModalButtons {
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 20px;
+    margin-top: 20px;
 }
 
+/* Progress Bar */
 .ProgressBarContainer {
     width: 100%;
-    height: 5px;
+    height: 8px;
     background-color: #e0e0e0;
-    margin-bottom: 20px;
     border-radius: 10px;
-  }
-  
-  .ProgressBar {
+    margin-bottom: 30px;
+}
+
+.ProgressBar {
     height: 100%;
-    background-color: #23d45f;
-    transition: width 0.3s ease;
+    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
     border-radius: 10px;
-  }
+    transition: width 0.5s ease-in-out;
+}
+
   .CheckIcon {
     width: 50px;
     height: 50px;
@@ -307,10 +373,7 @@ button[type="submit"]:focus {
 .CardPreview {
     display: flex;
     justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-    padding: 20px;
-    border-radius: 12px;
+    margin: 30px 0;
 }
 .input-error {
     border: 1px solid red;
@@ -321,16 +384,15 @@ button[type="submit"]:focus {
     font-size: 12px;
 }
 
+
 .Card {
-    background: linear-gradient(135deg, #1f7a8c, #3b99b3);
-    padding: 15px; 
-    border-radius: 12px; 
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     color: white;
-    width: 260px; 
-    height: 140px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); 
+    border-radius: var(--border-radius);
+    padding: 25px;
+    width: 350px;
+    box-shadow: var(--box-shadow);
+    transition: transform 0.3s ease;
 }
 
 /* Ícone de cartão no canto superior direito */
@@ -342,10 +404,10 @@ button[type="submit"]:focus {
 }
 
 .CardNumber {
-    font-size: 18px; 
-    letter-spacing: 1.5px;
-    margin-bottom: 15px;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 3px;
+    font-size: 22px;
+    margin-bottom: 20px;
 }
 
 .CardDetails {
@@ -374,6 +436,15 @@ button[type="submit"]:focus {
     .Card {
         width: 100%;
         padding: 10px;
+        overflow-x: auto; /* Adiciona rolagem horizontal */
+        white-space: nowrap; /* Impede que o conteúdo quebre em várias linhas */
+    }
+
+    .DetalhesMainContent {
+        width: 100%;
+        padding: 10px;
+        overflow-x: auto; /* Adiciona rolagem horizontal */
+        white-space: nowrap; /* Impede que o conteúdo quebre em várias linhas */
     }
 
     .CardNumber {

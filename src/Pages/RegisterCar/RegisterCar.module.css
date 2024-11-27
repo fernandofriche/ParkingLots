@@ -38,55 +38,126 @@
     width: 120px;
     transition: transform 0.3s ease;
 }
-
 .main {
     text-align: center;
     padding: 50px 20px;
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
+    align-items: center;
     margin-top: 5%;
-}
-
-.container {
-    width: 20%;
-    margin-top: 2%;
+    font-family: 'Inter', sans-serif;
 }
 
 .title {
-    color: black;
-    font-size: 32px;
+    color: #277D8E;
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.icon {
+    font-size: 40px;
+}
+
+.container {
+    width: 100%;
+    max-width: 400px;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.5s ease-in-out;
 }
 
 .inputGroup {
     margin-bottom: 20px;
-    border: 1px solid black;
+    position: relative;
     border-radius: 5px;
     overflow: hidden;
     display: flex;
     align-items: center;
+    background: #f0f4f8;
 }
 
 .inputGroup input {
-    flex: 1;
-    padding: 10px;
+    width: 100%;
+    padding: 15px;
     border: none;
-    font-size: 14px;
-    color: #aaa;
+    font-size: 16px;
+    color: #555;
+    background: transparent;
+    outline: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.inputGroup button {
-    padding: 10px 20px;
-    background-color: #ddd;
-    border: none;
-    cursor: pointer;
+.inputGroup input::placeholder {
+    color: #aaa;
+    font-style: italic;
+}
+
+.inputGroup input:focus {
+    background-color: #e3f2fd;
+    color: #277D8E;
     font-weight: bold;
+    border-left: 3px solid #277D8E;
+}
+
+.addButton {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #277D8E, #1b5d6b);
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.addButton:hover {
+    background: linear-gradient(135deg, #1b5d6b, #277D8E);
+    transform: scale(1.02);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .viewVehicles {
-    margin-top: 10px;
-    font-size: 14px;
-    color: black;
+    margin-top: 20px;
+    font-size: 16px;
+    color: #277D8E;
     text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.viewVehicles:hover {
+    color: #1b5d6b;
+}
+
+.viewVehicles svg {
+    font-size: 18px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

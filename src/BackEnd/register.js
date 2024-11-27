@@ -3,10 +3,12 @@ import { setDoc, doc } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
 class RegisterClass {
-    constructor(nomeCompleto, email, password) {
+    constructor(nomeCompleto, email, password, role = "user", cnpj = "") { 
         this.nomeCompleto = nomeCompleto;
         this.email = email;
         this.password = password;
+        this.role = role;
+        this.cnpj = cnpj;
     }
 
     async register() {
@@ -15,12 +17,19 @@ class RegisterClass {
             const user = userCredential.user;
 
             if (user) {
-                console.log("Usuário criado:", user.uid); // Log para verificar a criação do usuário
-                await setDoc(doc(db, "Users", user.uid), {
+                console.log("Usuário criado:", user.uid);
+                const userData = {
                     email: this.email,
-                    nomeCompleto: this.nomeCompleto
-                });
-                console.log("Dados do usuário salvos no Firestore."); // Log para verificar a gravação no Firestore
+                    nomeCompleto: this.nomeCompleto,
+                    role: this.role
+                };
+
+                if (this.role === "admin") {
+                    userData.cnpj = this.cnpj;
+                }
+
+                await setDoc(doc(db, "Users", user.uid), userData);
+                console.log("Dados do usuário salvos no Firestore.");
             }
 
             return { success: true, message: "Usuário cadastrado com sucesso!" };

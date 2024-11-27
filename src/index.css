@@ -1,5 +1,26 @@
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+@media (max-width: 700px) {
+  .esconder-mobile {
+    display: none !important;
+  }
+
+}
+
+@media (min-width: 700px) {
+  .esconder-desktop {
+    display: none !important;
+  }
+
+  .navbar-dark {
+    display: none !important;
+  }
+}
+
+.navbar-dark {
+  background-color: #277D8E !important;
 }

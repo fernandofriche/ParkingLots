@@ -1,5 +1,4 @@
-// BackEnd/VisualizarCars.js
-import { doc, getDoc, updateDoc, arrayRemove } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '../Services/firebaseConfig';
 
 class VisualizarCars {
@@ -19,17 +18,19 @@ class VisualizarCars {
         }
     }
 
-    async removeCar(car) {
+    async removeCar(carroId) {
         const currentUser = auth.currentUser;
         if (!currentUser) {
             throw new Error("Usuário não está logado.");
         }
-
+    
         const userRef = doc(db, "Users", currentUser.uid);
         await updateDoc(userRef, {
-            cars: arrayRemove(car)
+            cars: arrayRemove({ id: carroId })
         });
     }
+    
+    
 }
 
 export default new VisualizarCars();

@@ -4,7 +4,7 @@ import { auth } from '../../Services/firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
 
 const RotaPrivada = () => {
-  const [loading, setLoading] = useState(true); // Estado para carregar
+  const [loading, setLoading] = useState(true); 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
@@ -14,15 +14,15 @@ const RotaPrivada = () => {
       } else {
         setIsAuthenticated(false);
       }
-      setLoading(false); // Carregamento concluído
+      setLoading(false); 
     });
 
-    // Cleanup da subscrição quando o componente desmontar
+    
     return () => unsubscribe();
   }, []);
 
   if (loading) {
-    return <p>Carregando...</p>; // Mostra algo enquanto o status de autenticação está carregando
+    return <p>Carregando...</p>; 
   }
 
   return isAuthenticated ? <Outlet /> : <Navigate to="/UserNaoAutorizado" />;

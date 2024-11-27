@@ -95,30 +95,136 @@ input {
     z-index: 1000; 
 }
 
+.btnSubmit {
+    width: 100%;
+    max-width: 550px;
+}
+
 .custom-toast {
     font-size: 5rem; 
     font-weight: bold; 
 }
 
-.PasswordContainer {
+.passwordContainer {
     position: relative;
-    width: 30vw; 
+    width: 30vw;
+    display: flex;
+    flex-direction: column;
 }
 
-.PasswordContainer input {
-    padding-right: 40px; 
+.passwordContainer input {
+    padding-right: 40px; /* Espaço para o ícone */
+    width: 100%;
 }
 
-.PasswordToggle {
+.passwordToggle {
     position: absolute;
     right: 10px; 
-    top: 40%;
+    top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
     font-size: 18px; 
     color: #277D8E; 
+    z-index: 10; /* Garantir que fique sobre o input */
 }
 
-.PasswordToggle:hover {
-    color: #555; 
+.radioContainer {
+    display: flex;
+    gap: 50px;
+    
+}
+
+
+/* Updated CSS for mobile responsiveness */
+@media screen and (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .esquerda {
+        width: 100%;
+        padding: 1rem;
+        order: 2;
+    }
+
+    .direita {
+        width: 100%;
+        padding: 2rem 0;
+        order: 1;
+    }
+
+    .input {
+        width: 100%;
+        max-width: 350px;
+        height: 50px;
+    }
+
+    .btnVoltar {
+        position: static;
+        margin-bottom: 1rem;
+        align-self: flex-start;
+    }
+
+    .radioContainer {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .esquerda h1 {
+        font-size: 2rem;
+        text-align: center;
+    }
+
+    .logo {
+        max-width: 200px;
+        margin: 0;
+    }
+
+    .btnSubmit {
+        width: 100%;
+        max-width: 350px;
+    }
+
+    .loginLink {
+        text-align: center;
+        margin-top: 1rem;
+    }
+
+    .passwordContainer {
+        width: 100%;
+        max-width: 350px;
+    }
+
+    .passwordToggle {
+        right: 15px;
+    }
+}
+
+/* Additional mobile-specific adjustments */
+@media screen and (max-width: 480px) {
+    .esquerda {
+        padding: 0.5rem;
+    }
+
+
+    .input {
+        height: 45px;
+    }
+    
+    .radioContainer {
+        font-size: 10px;
+    }
+
+    .passwordContainer {
+        width: 100%;
+        max-width: 350px;
+    }
+
+    .passwordToggle {
+        right: 15px;
+    }
 }

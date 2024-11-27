@@ -119,6 +119,14 @@
       "userRating": 4.3,
       "hourlyRate": 20.00,
       "image": "/src/assets/Cards/Norte.svg"
+    },
+    {
+      "id": 16,
+      "name": "Rua Padre Pedro Pinto, 2000 - Venda Nova, Belo Horizonte, MG",
+      "description": "Estacionamento amplo com segurança 24 horas na Zona Norte da cidade.",
+      "userRating": 4.3,
+      "hourlyRate": 20.00,
+      "image": "/src/assets/Cards/Norte.svg"
     }
   ]
 }

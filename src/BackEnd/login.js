@@ -8,14 +8,14 @@ class Logar {
         this.password = password;
     }
 
-    // Método para login com email e senha
+    
     async login() {
         try {
             if (!this.email || !this.password) {
                 throw new Error("Preencha os campos abaixo corretamente.");
             }
 
-            // Realiza o login com Firebase Authentication
+            
             await signInWithEmailAndPassword(auth, this.email, this.password);
             return { success: true, message: "Login realizado com sucesso!" };
         } catch (error) {
@@ -23,7 +23,7 @@ class Logar {
         }
     }
 
-    // Método estático para login com Google
+   
     static async loginWithGoogle() {
         try {
             const provider = new GoogleAuthProvider();
@@ -32,11 +32,11 @@ class Logar {
 
             if (!user) throw new Error("Erro ao realizar login com Google.");
 
-            // Verifica se o usuário existe no Firestore
+            
             const userDocRef = doc(db, "Users", user.uid);
             const userDoc = await getDoc(userDocRef);
 
-            // Se o usuário não existir, exclui e retorna um erro
+            
             if (!userDoc.exists()) {
                 await user.delete();
                 throw new Error("Este e-mail não está registrado. Realize o cadastro primeiro.");
@@ -48,7 +48,6 @@ class Logar {
         }
     }
 
-    // Função de tratamento de erros
     handleError(error) {
         let errorMessage;
 

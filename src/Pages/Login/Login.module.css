@@ -231,3 +231,87 @@
     border-color: #1F7A8C; /* Ajuste a cor conforme sua paleta de cores */
     box-shadow: 0 0 5px rgba(20, 96, 107, 0.4)    ; /* Efeito de foco */
 }
+
+@media screen and (max-width: 768px) {
+    .container {
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .tudo {
+        flex-direction: column;
+    }
+
+    .esquerda {
+        width: 100%;
+        padding: 20px;
+        order: 2;
+    }
+
+    .direita {
+        width: 100%;
+        padding: 30px 0;
+        order: 1;
+        background-color: #1F7A8C;
+    }
+
+    .logo img {
+        max-width: 150px;
+        margin-bottom: 20px;
+    }
+
+    .DivInputs h1 {
+        font-size: 2rem;
+        text-align: center;
+        color: #277D8E;
+    }
+
+    .BtnGoogle {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .separador {
+        margin: 15px 0;
+    }
+
+    .DivInputs input {
+        height: 45px;
+        font-size: 0.9rem;
+    }
+
+    .BtnEntrar {
+        height: 45px;
+        font-size: 16px;
+    }
+
+    .Registrar {
+        font-size: 14px;
+        text-align: center;
+    }
+
+    .PasswordToggle {
+        right: 10px;
+    }
+}
+
+/* Ajustes extras para telas muito pequenas */
+@media screen and (max-width: 480px) {
+    .esquerda {
+        padding: 15px;
+    }
+
+    .DivInputs h1 {
+        font-size: 1.8rem;
+    }
+
+    .BtnGoogle img {
+        width: 16px;
+        height: 16px;
+    }
+
+    .DivInputs input, .BtnEntrar {
+        height: 40px;
+        font-size: 0.85rem;
+    }
+}

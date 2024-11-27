@@ -4,8 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaEye, FaEyeSlash, FaArrowCircleLeft } from 'react-icons/fa';
 import Styles from './Register.module.css';
-import RegisterController from "../../BackEnd/controllers/RegisterController "
-import 'react-toastify/dist/ReactToastify.css';
+import RegisterController from "../../BackEnd/controllers/RegisterController ";
 import Logo7 from '../../assets/Images/Logo7.svg';
 
 function Register() {
@@ -16,47 +15,61 @@ function Register() {
     const [confirmedPassword, setConfirmedPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
+    const [userType, setUserType] = useState("user");
 
-    const toggleShowPassword = () => {
-        setShowPassword(!showPassword);
-    };
+    const toggleShowPassword = () => setShowPassword(!showPassword);
+    const toggleShowConfirmedPassword = () => setShowConfirmedPassword(!showConfirmedPassword);
 
-    const toggleShowConfirmedPassword = () => {
-        setShowConfirmedPassword(!showConfirmedPassword);
-    };
-
-    const Voltar = () => {
-        navigate('/');
-    };
+    const Voltar = () => navigate('/');
 
     const RealizarRegistro = async (e) => {
         e.preventDefault();
-
         if (password !== confirmedPassword) {
             toast.error("As senhas não coincidem", { position: "top-center" });
+            return;
+        }
+
+        const result = await RegisterController.handleRegister(nomeCompleto, email, password, userType);
+        if (result.success) {
+            toast.success(result.message, { position: "top-center" });
+            setTimeout(() => navigate('/'), 2000);
         } else {
-            const result = await RegisterController.handleRegister(nomeCompleto, email, password);
-            if (result.success) {
-                toast.success(result.message, { position: "top-center" });
-                setTimeout(() => {
-                    navigate('/');
-                }, 2000);
-            } else {
-                toast.error(result.message, { position: "top-center" });
-            }
+            toast.error(result.message, { position: "top-center" });
         }
     };
 
     return (
         <>
             <ToastContainer />
-            <form onSubmit={RealizarRegistro}>
+            <form className={Styles.formContainer} onSubmit={RealizarRegistro}>
                 <div className={Styles.container}>
                     <div className={Styles.esquerda}>
                         <button className={Styles.btnVoltar} onClick={Voltar}>
-                            <FaArrowCircleLeft size={24} />Voltar
+                            <FaArrowCircleLeft size={24} /> Voltar
                         </button>
-                        <h1>Cadastro de Usuário</h1>
+                        <h1>Cadastro</h1>
+
+                        <div className={Styles.radioContainer}>
+                            <label>
+                                <input
+                                    type="radio"
+                                    value="user"
+                                    checked={userType === "user"}
+                                    onChange={() => setUserType("user")}
+                                />
+                                Usuário
+                            </label>
+                            <label>
+                                <input
+                                    type="radio"
+                                    value="partner"
+                                    checked={userType === "partner"}
+                                    onChange={() => setUserType("partner")}
+                                />
+                                Parceiro
+                            </label>
+                        </div>
+
                         <input 
                             type="text" 
                             placeholder="Nome Completo" 
@@ -73,8 +86,8 @@ function Register() {
                             className={Styles.input} 
                             required 
                         />
-                        
-                        <div className={Styles.PasswordContainer}>
+
+                        <div className={Styles.passwordContainer}>
                             <input
                                 type={showPassword ? "text" : "password"}
                                 placeholder="Senha"
@@ -83,12 +96,12 @@ function Register() {
                                 className={Styles.input}
                                 required
                             />
-                            <span onClick={toggleShowPassword} className={Styles.PasswordToggle}>
+                            <span onClick={toggleShowPassword} className={Styles.passwordToggle}>
                                 {showPassword ? <FaEyeSlash /> : <FaEye />}
                             </span>
                         </div>
 
-                        <div className={Styles.PasswordContainer}>
+                        <div className={Styles.passwordContainer}>
                             <input
                                 type={showConfirmedPassword ? "text" : "password"}
                                 placeholder="Confirme a senha"
@@ -97,15 +110,16 @@ function Register() {
                                 className={Styles.input}
                                 required
                             />
-                            <span onClick={toggleShowConfirmedPassword} className={Styles.PasswordToggle}>
+                            <span onClick={toggleShowConfirmedPassword} className={Styles.passwordToggle}>
                                 {showConfirmedPassword ? <FaEyeSlash /> : <FaEye />}
                             </span>
                         </div>
-                        <button onClick={RealizarRegistro} className={Styles.BtnEntrar}>Criar Conta</button>
-                        <p className={Styles.possuiConta}>Já possui conta?<a onClick={Voltar} href="">Entrar</a></p>
+                        <button type="submit" className={Styles.btnSubmit}>Criar Conta</button>
+
+                        <p className={Styles.loginLink}>Já possui conta? <a onClick={Voltar} href="#">Entrar</a></p>
                     </div>
                     <div className={Styles.direita}>
-                        <img src={Logo7} className={Styles.logo} />
+                        <img src={Logo7} className={Styles.logo} alt="Logo" />
                     </div>
                 </div>
             </form>

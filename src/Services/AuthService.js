@@ -1,25 +1,30 @@
-import { doc, getDoc } from "firebase/firestore"; // Importar doc e getDoc corretamente
-import { auth, db } from "./firebaseConfig"; // Certificar-se de que db está importado corretamente
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "./firebaseConfig";
+import { signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword } from "firebase/auth";
 
 class AuthService {
-  static async loginWithGoogle() {
+  static async loginWithEmailAndPassword(email, password) {
     try {
-      const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
 
-      if (!user) throw new Error("Erro ao realizar login com Google.");
+      if (!user) throw new Error("Erro ao realizar login.");
 
-      // Acessar documento do usuário no Firestore usando doc e getDoc
-      const userDocRef = doc(db, "Users", user.uid); // Certifique-se de passar o caminho correto para o documento
+      const userDocRef = doc(db, "Users", user.uid);
       const userDoc = await getDoc(userDocRef);
 
       if (!userDoc.exists()) {
-        throw new Error("Este e-mail não está registrado. Realize o cadastro primeiro.");
+        throw new Error("Usuário não encontrado.");
       }
 
-      return { success: true, message: "Login com Google realizado com sucesso!" };
+      const userData = userDoc.data();
+      return {
+        success: true,
+        message: "Login realizado com sucesso!",
+        role: userData.role,
+        cnpj: userData.cnpj || null 
+    };    
+      
     } catch (error) {
       return AuthService.handleError(error);
     }

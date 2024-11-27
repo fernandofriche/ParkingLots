@@ -1,4 +1,3 @@
-// services/ReservaService.js
 import { db } from './firebaseConfig';
 import Reserva from '../Models/Reserva';
 
@@ -18,7 +17,6 @@ class ReservaService {
         return { id: doc.id, ...doc.data() };
     }
 
-    // Adicione outros métodos conforme necessário (atualizar, deletar)
 }
 
 export default new ReservaService();

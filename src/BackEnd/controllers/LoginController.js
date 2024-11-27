@@ -1,4 +1,4 @@
-import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth"; // Adicione GoogleAuthProvider
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth, db } from "../../Services/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 
@@ -6,7 +6,17 @@ class LoginController {
     static async handleLogin(email, password) {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            return { success: true, message: "Login realizado com sucesso!", user: userCredential.user };
+            const user = userCredential.user;
+
+            const userDocRef = doc(db, "Users", user.uid);
+            const userDoc = await getDoc(userDocRef);
+
+            if (userDoc.exists()) {
+                const role = userDoc.data().role;
+                return { success: true, message: "Login realizado com sucesso!", role };
+            } else {
+                throw new Error("Dados do usuário não encontrados.");
+            }
         } catch (error) {
             return { success: false, message: error.message };
         }
@@ -18,7 +28,6 @@ class LoginController {
             const result = await signInWithPopup(auth, provider);
             const user = result.user;
 
-            // Verificar se o usuário já está registrado
             const userDocRef = doc(db, "Users", user.uid);
             const userDoc = await getDoc(userDocRef);
 
@@ -26,7 +35,8 @@ class LoginController {
                 throw new Error("Este e-mail não está registrado. Realize o cadastro primeiro.");
             }
 
-            return { success: true, message: "Login com Google realizado com sucesso!", user };
+            const role = userDoc.data().role;
+            return { success: true, message: "Login com Google realizado com sucesso!", role };
         } catch (error) {
             return { success: false, message: error.message };
         }

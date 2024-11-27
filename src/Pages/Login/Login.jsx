@@ -23,18 +23,19 @@ function Login() {
 
     const RealizarLogin = async (e) => {
         e.preventDefault();
-        console.log("Tentando logar...");
-
         const result = await LoginController.handleLogin(email, password);
 
         if (result.success) {
             toast.success("Login realizado com sucesso!", { position: "top-center" });
-            navigate("/Profile");
+            if (result.role === "partner") {
+                navigate("/Parceiros"); 
+            } else {
+                navigate("/profile"); 
+            }
         } else {
             toast.error(result.message, { position: "top-center" });
         }
     };
-
 
     const RealizarLoginGoogle = async (e) => {
         e.preventDefault();
@@ -42,7 +43,11 @@ function Login() {
 
         if (result.success) {
             toast.success(result.message, { position: "top-center" });
-            navigate("/Profile");
+            if (result.role === "partner") {
+                navigate("/Parceiros");
+            } else {
+                navigate("/profile");
+            }
         } else {
             toast.error(result.message, { position: "top-center" });
         }

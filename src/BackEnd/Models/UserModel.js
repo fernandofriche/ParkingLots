@@ -1,11 +1,11 @@
-import { doc, setDoc } from "firebase/firestore"; // Certifique-se de que essas funções estão importadas
+import { doc, setDoc } from "firebase/firestore";
 import { db } from "../../Services/firebaseConfig";
 
 class UserModel {
     constructor(uid, email, nomeCompleto) {
         this.uid = uid;
         this.email = email;
-        this.nomeCompleto = nomeCompleto; // Adicione esta propriedade
+        this.nomeCompleto = nomeCompleto; 
     }
 
     async saveToFirestore() {

@@ -1,66 +1,66 @@
 import React, { useState, useEffect } from 'react';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, collection, getDocs, query, where } from 'firebase/firestore';
 import { db, auth } from '../../Services/firebaseConfig';
 import Styles from './Reservas.module.css';
 import LogoNew from '../../assets/Images/LogoNewVersion.png';
 import CircleUser from '../../assets/Images/CircleUser.png';
 import { useNavigate } from 'react-router-dom';
-import iconDelete from '../../assets/Images/iconDelete.png';
 import { FcCancel } from "react-icons/fc";
+import { FaChevronUp, FaChevronDown, FaStar } from 'react-icons/fa';
+import Header from "../Header/header"
 
 function Reservas() {
     const navigate = useNavigate();
     const [reservas, setReservas] = useState([]);
-    const [showModal, setShowModal] = useState(false);
-    const [reservationId, setReservationId] = useState(null); // Armazena o ID da reserva a ser cancelada
     const [parkingLots, setParkingLots] = useState([]);
-    const [editForm, setEditForm] = useState({
-        placa: '',
-        local: '',
-        entrada: '',
-        saida: ''
-    });
-    const [valorTotal, setValorTotal] = useState(0);
+    const [collapsedGroups, setCollapsedGroups] = useState({});
+    const [selectedMonth, setSelectedMonth] = useState('');
+    const [avaliacoes, setAvaliacoes] = useState({});
     const currentUser = auth.currentUser;
+    const [selectedYear, setSelectedYear] = useState('');
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [deletingId, setDeletingId] = useState(null);
+    const [parkingLot, setParkingLot] = useState(null);
+    const [address, setAddress] = useState("");
+    const [deletingReservas, setDeletingReservas] = useState({});
 
-    function Estacionamentos() {
-        navigate('/HomePage');
-    }
+    const handleYearChange = (event) => {
+        setSelectedYear(event.target.value);
+    };
 
-    function HomePage() {
-        navigate('/HomePage');
-    }
+    const Reservas = () => navigate('/Reservas');
+    const VisualizarCarros = () => navigate('/RegisterCar');
 
-    function RegisterCar() {
-        navigate('/RegisterCar');
-    }
+    const HomePage = () => navigate('/HomePage');
 
-    function Profile() {
-        navigate('/Profile');
-    }
 
     useEffect(() => {
+
         const fetchReservas = async () => {
-            if (!currentUser) {
-                console.error("Usuário não está logado.");
-                return;
-            }
+            if (!currentUser) return;
 
             try {
-                const userRef = doc(db, "Users", currentUser.uid);
-                const userDoc = await getDoc(userRef);
+                const reservasRef = collection(db, "Reservas");
+                const reservasQuery = query(reservasRef, where("userId", "==", currentUser.uid));
 
-                if (userDoc.exists()) {
-                    const userData = userDoc.data();
-                    setReservas(userData.reservas || []);
-                } else {
-                    console.error("Documento do usuário não encontrado.");
-                    setReservas([]);
+                const reservasSnapshot = await getDocs(reservasQuery);
+
+                if (!reservasSnapshot.empty) {
+                    const reservas = [];
+                    reservasSnapshot.forEach(doc => {
+                        reservas.push({
+                            ...doc.data(),
+                            id: doc.id
+                        });
+                    });
+
+                    setReservas(reservas);
                 }
             } catch (error) {
                 console.error("Erro ao buscar reservas: ", error);
             }
         };
+
 
         const fetchParkingLots = async () => {
             try {
@@ -74,160 +74,256 @@ function Reservas() {
 
         fetchReservas();
         fetchParkingLots();
-    }, [currentUser]);
+    }, [], [currentUser]
+    );
 
-    const calcularValorTotal = (entrada, saida, hourlyRate) => {
-        if (!entrada || !saida) return 0;
-
-        const horaEntrada = new Date(entrada);
-        const horaSaida = new Date(saida);
-
-        if (horaSaida <= horaEntrada) {
-            horaSaida.setDate(horaSaida.getDate() + 1);
-        }
-
-        const diferencaHoras = (horaSaida - horaEntrada) / (1000 * 60 * 60);
-        console.log(`Valor total calculado: ${diferencaHoras * hourlyRate}`);
-        return diferencaHoras * hourlyRate;
+    const formatDate = (dateTimeString) => {
+        const date = new Date(dateTimeString);
+        return date.toLocaleDateString('pt-BR');
     };
 
-    useEffect(() => {
-        if (editForm.entrada && editForm.saida) {
-            const parkingLot = parkingLots.find(lot => lot.name === editForm.local);
-            const hourlyRate = parkingLot ? parkingLot.hourlyRate : 0;
-            const valor = calcularValorTotal(editForm.entrada, editForm.saida, hourlyRate);
-            setValorTotal(valor);
-        }
-    }, [editForm, parkingLots]);
+    const formatDateTime = (dateTimeString) => {
+        const dateTime = new Date(dateTimeString);
+        return dateTime.toLocaleString('pt-BR', {
+            dateStyle: 'short',
+            timeStyle: 'short',
+        });
+    };
 
     const handleDelete = async (id) => {
+        if (deletingReservas[id]) {
+            return;
+        }
+
+        setDeletingReservas(prev => ({
+            ...prev,
+            [id]: true
+        }));
+
         try {
+            const reservaParaCancelar = reservas.find(reserva => reserva.id === id);
+
+            if (!reservaParaCancelar) {
+                console.error("Reserva não encontrada");
+                return;
+            }
+
+            if (reservaParaCancelar.userId !== currentUser.uid) {
+                console.error("Você não tem permissão para cancelar esta reserva");
+                alert("Você não pode cancelar reservas de outros usuários");
+                return;
+            }
+
+            const reservaRef = doc(db, "Reservas", id);
+
+            await updateDoc(reservaRef, {
+                status: "Cancelada",
+                canceledBy: currentUser.uid,
+                canceledAt: new Date().toISOString()
+            });
+
+            setReservas((prevReservas) =>
+                prevReservas.map((reserva) =>
+                    reserva.id === id ? { ...reserva, status: 'Cancelada' } : reserva
+                )
+            );
+
+            console.log("Reserva cancelada com sucesso!");
+            alert("Reserva cancelada com sucesso!");
+        } catch (error) {
+            console.error("Erro ao cancelar reserva: ", error);
+
+            if (error.code === 'permission-denied') {
+                alert("Você não tem permissão para cancelar esta reserva. Verifique se a reserva pertence a você.");
+            } else {
+                alert("Erro ao cancelar a reserva. Tente novamente.");
+            }
+        } finally {
+            setDeletingReservas(prev => {
+                const newState = { ...prev };
+                delete newState[id];
+                return newState;
+            });
+        }
+    };
+
+
+
+    const toggleGroup = (date) => {
+        setCollapsedGroups(prev => ({
+            ...prev,
+            [date]: !prev[date],
+        }));
+    };
+
+    const handleMonthChange = (event) => {
+        setSelectedMonth(event.target.value);
+    };
+
+    const handleAvaliacao = async (id, nota) => {
+        try {
+            setAvaliacoes((prev) => ({
+                ...prev,
+                [id]: nota,
+            }));
+
             const userRef = doc(db, "Users", currentUser.uid);
             const userDoc = await getDoc(userRef);
 
             if (userDoc.exists()) {
-                const reservasAtualizadas = userDoc.data().reservas.filter(reserva => reserva.id !== id);
+                const reservasAtualizadas = userDoc.data().reservas.map((reserva) =>
+                    reserva.id === id ? { ...reserva, avaliacao: nota } : reserva
+                );
                 await updateDoc(userRef, { reservas: reservasAtualizadas });
                 setReservas(reservasAtualizadas);
-            } else {
-                console.error("Documento do usuário não encontrado.");
             }
         } catch (error) {
-            console.error("Erro ao excluir reserva: ", error);
+            console.error("Erro ao salvar avaliação: ", error);
         }
     };
 
-    const openModal = (id) => {
-        setReservationId(id);
-        setShowModal(true);
+    const renderStars = (id, notaAtual) => {
+        const MAX_STARS = 5;
+        return (
+            <div className={Styles.EstrelasContainer}>
+                {[...Array(MAX_STARS)].map((_, index) => {
+                    const starValue = index + 1;
+                    return (
+                        <FaStar
+                            key={index}
+                            size={20}
+                            color={starValue <= (avaliacoes[id] || notaAtual || 0) ? "#ffc107" : "#e4e5e9"}
+                            onClick={() => handleAvaliacao(id, starValue)}
+                            style={{ cursor: "pointer", marginRight: 5 }}
+                        />
+                    );
+                })}
+            </div>
+        );
     };
 
-    const closeModal = () => {
-        setShowModal(false);
-        setReservationId(null);
-    };
+    const filteredReservations = reservas
+        .filter(reserva => {
+            const date = new Date(reserva.entrada);
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear();
 
-    const confirmDelete = () => {
-        handleDelete(reservationId);
-        closeModal();
-    };
+            return (
+                (selectedMonth === '' || selectedMonth === month) &&
+                (selectedYear === '' || selectedYear === year.toString())
+            );
+        })
+        .sort((a, b) => new Date(b.entrada) - new Date(a.entrada));
 
-    const formatDateTime = (dateTimeString) => {
-        if (!dateTimeString) return 'Data e Hora inválidas';
-
-        const dateTime = new Date(dateTimeString);
-        return dateTime.toLocaleString('pt-BR', {
-            dateStyle: 'short',
-            timeStyle: 'short'
-        });
-    };
+    const groupedReservations = filteredReservations.reduce((acc, reserva) => {
+        const date = formatDate(reserva.entrada);
+        if (!acc[date]) acc[date] = [];
+        acc[date].push(reserva);
+        return acc;
+    }, {});
 
     return (
-        <div>
-            <header className={Styles.Cabecalho}>
-                <div className={Styles.DivLista}>
-                    <ul>
-                        <li>
-                            <a onClick={HomePage}>
-                                <img className={Styles.Logo} src={LogoNew} alt="Logo" />
-                            </a>
-                        </li>
-                        <li><a href="#estacionamentos" onClick={Estacionamentos}>Estacionamentos</a></li>
-                        <li><a href="#reservas">Reservas</a></li>
-                        <li><a href="#seu-carro" onClick={RegisterCar}>Seu Carro</a></li>
-                        <li><a href="#como-funciona">Como Funciona</a></li>
-                        <li>
-                            <a onClick={Profile}>
-                                <img src={CircleUser} alt="User" className={Styles.UserIcon} />
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </header>
+        <div className={Styles.Page}>
+            <Header/>
 
             <main className={Styles.ReservasMainContent}>
-                {reservas.length > 0 ? (
-                    <table className={Styles.ReservasTable}>
-                        <thead>
-                            <tr>
-                                <th>TICKET ID</th>
-                                <th>PLACA DO VEÍCULO</th>
-                                <th>LOCAL</th>
-                                <th>ENTRADA</th>
-                                <th>SAÍDA</th>
-                                <th>VALOR TOTAL</th>
-                                <th>AÇÕES</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {reservas.map((reserva) => {
-                                const parkingLot = parkingLots.find(lot => lot.name === reserva.local);
-                                const valorTotal = calcularValorTotal(
-                                    reserva.entrada,
-                                    reserva.saida,
-                                    parkingLot ? parkingLot.hourlyRate : 0
-                                );
+                <div className={Styles.Align}>
+                    <div className={Styles.FiltroMes}>
+                        <label htmlFor="year" className={Styles.LabelFiltroMes}>Filtrar por Ano: </label>
+                        <select
+                            id="year"
+                            value={selectedYear}
+                            onChange={handleYearChange}
+                            className={Styles.SelectFiltroMes}
+                        >
+                            <option value="">Todos</option>
+                            {[2024, 2025, 2026].map((year) => (
+                                <option key={year} value={year}>
+                                    {year}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
 
+                    <div className={Styles.FiltroMes}>
+                        <label htmlFor="month" className={Styles.LabelFiltroMes}>Filtrar por Mês: </label>
+                        <select
+                            id="month"
+                            value={selectedMonth}
+                            onChange={handleMonthChange}
+                            className={Styles.SelectFiltroMes}
+                        >
+                            <option value="">Todos</option>
+                            {[...Array(12)].map((_, index) => {
+                                const month = (index + 1).toString().padStart(2, '0');
                                 return (
-                                    <tr key={reserva.id}>
-                                        <td>{reserva.id}</td>
-                                        <td>{reserva.placa}</td>
-                                        <td>{reserva.local}</td>
-                                        <td>{formatDateTime(reserva.entrada)}</td>
-                                        <td>{formatDateTime(reserva.saida)}</td>
-                                        <td>R$ {valorTotal.toFixed(2)}</td>
-                                        <td>
-                                            <button onClick={() => openModal(reserva.id)}>
-                                                <FcCancel className={Styles.IconDelete} /> {/* Ícone de deletar */}
-                                            </button>                                       
-                                        </td>
-                                    </tr>
+                                    <option key={month} value={month}>
+                                        {new Date(2000, index).toLocaleString('pt-BR', { month: 'long' })}
+                                    </option>
                                 );
                             })}
-                        </tbody>
-                    </table>
+                        </select>
+                    </div>
+                </div>
+
+                {/* Teste pra testar o save */}
+                {Object.keys(groupedReservations).length > 0 ? (
+                    Object.keys(groupedReservations).map(date => (
+                        <div key={date} className={Styles.paddingReserva}>
+                            <div className={Styles.DataContainer}>
+                                <h2 onClick={() => toggleGroup(date)}>
+                                    {date} {collapsedGroups[date] ? <FaChevronUp /> : <FaChevronDown />}
+                                </h2>
+                            </div>
+                            {!collapsedGroups[date] && (
+                                <table className={Styles.ReservasTable}>
+                                    <thead>
+                                        <tr>
+                                            <th>TICKET ID</th>
+                                            <th>PLACA</th>
+                                            <th>LOCAL</th>
+                                            <th>ENTRADA</th>
+                                            <th>SAÍDA</th>
+                                            <th>TOTAL</th>
+                                            <th>STATUS</th>
+                                            <th>AÇÕES</th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+                                        {groupedReservations[date].map((reserva) => (
+                                            <tr key={reserva.id}>
+                                                <td>{reserva.id}</td>
+                                                <td>{reserva.placa}</td>
+                                                <td>{reserva.local}</td>
+                                                <td>{formatDateTime(reserva.entrada)}</td>
+                                                <td>{formatDateTime(reserva.saida)}</td>
+                                                <td>{`R$ ${(reserva.valorTotal).toFixed(2)}`}</td>
+                                                <td>{reserva.status}</td>
+
+                                                <td>
+                                                    <button
+                                                        onClick={() => handleDelete(reserva.id)}
+                                                        className={Styles.BotaoCancelar}
+                                                        disabled={deletingReservas[reserva.id] || reserva.status === 'Cancelada'}
+                                                    >
+                                                        {deletingReservas[reserva.id] ? 'Cancelando...' : 'Cancelar'}
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+
+                                </table>
+                            )}
+                        </div>
+                    ))
                 ) : (
-                    <div className={Styles.NoReservas}>
-                        <p>*Não há necessidade de imprimir nada! Todas as suas reservas estão aqui.*</p>
-                        <p>*Os estacionamentos modernos são equipados com reconhecimento automático de placas (ALPR).*</p>
+                    <div className={Styles.SemReservas}>
+                        <h2>Nenhuma reserva encontrada.</h2>
                     </div>
                 )}
 
-                {/* Modal de confirmação */}
-                {showModal && (
-                    <div className={Styles.Overlay}>
-                        <div className={Styles.ModalReserva}>
-                            <h2>Confirmar Cancelamento</h2>
-                            <p>Tem certeza de que deseja cancelar esta reserva?</p>
-                            <button type="button" onClick={confirmDelete}>
-                                Confirmar
-                            </button>
-                            <button type="button" onClick={closeModal}>
-                                Cancelar
-                            </button>
-                        </div>
-                    </div>
-                )}
             </main>
         </div>
     );

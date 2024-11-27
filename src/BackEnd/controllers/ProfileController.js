@@ -1,4 +1,5 @@
 // src/BackEnd/ProfileController.js
+
 import ProfileService from '../Profile';
 import ProfileModel from "../Models/ProfileModel";
 
@@ -11,6 +12,11 @@ class ProfileController {
         return null;
     }
 
+    async fetchCars() {
+        
+        return await ProfileService.fetchCars(); 
+    }
+
     async updateUserProfile(nomeCompleto, email) {
         return await ProfileService.updateUserProfile(nomeCompleto, email);
     }
@@ -21,6 +27,10 @@ class ProfileController {
 
     async deleteUserProfile() {
         return await ProfileService.deleteUser();
+    }
+
+    async deleteCar(carroId) {
+        return await ProfileService.removeCar(carroId);
     }
 }
 

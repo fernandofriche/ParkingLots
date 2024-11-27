@@ -17,7 +17,7 @@ function ResetPassword() {
         const response = await ResetPasswordController.resetPassword(email); 
         if (response.success) {
             toast.success(response.message);
-            setEmail(""); // Limpar o campo de email após o envio
+            setEmail(""); 
         } else {
             toast.error(response.message);
         }
