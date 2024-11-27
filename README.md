@@ -30,10 +30,16 @@ parkinglots/
 │   ├── BackEnd/
 │   │   └── Controllers/
 │   │       ├── LoginController.js 
+
 │   │       ├── ProfileController.js 
+
 │   │       ├── RegisterCarController.js 
+
 │   │       ├── RegisterController.js 
+
 │   │       ├── ResetPasswordController.js 
+
+
 │   │       ├── VisualizarCarsController.js 
 │   ├── Models/ 
 │   │   ├── ProfileModel.js 
