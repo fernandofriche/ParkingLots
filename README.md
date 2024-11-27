@@ -24,22 +24,22 @@ Tecnologias Utilizadas 🛠️
 ⦁	JavaScript
 Organização das Pastas
 parkinglots/ 
-├── public/
-├── src/ 
-│   ├── BackEnd/
-│   │   └── Controllers/
-│   │   │ └── LoginController.js 
-│   │   │ └── ProfileController.js 
-│   │   │ └── RegisterCarController.js 
-│   │   │ └── RegisterController.js 
-│   │   │ └── ResetPasswordController.js 
-│   │   │ └── VisualizarCarsController.js 
-│   ├── Models/ 
-│   │   │ └── ProfileModel.js 
-│   │   │ └── RegisterCarModel.js 
-│   │   │ └── ResetPasswordModel.js 
-│   │   │ └── UserModel.js 
-│   │   │ └── VisualizarCarsModel.js 
+|── public/
+|── src/ 
+|   ├── BackEnd/
+|   │   └── Controllers/
+|   │   │ └── LoginController.js 
+|   │   │ └── ProfileController.js 
+|   │   │ └── RegisterCarController.js 
+|   │   │ └── RegisterController.js 
+|   │   │ └── ResetPasswordController.js 
+|   │   │ └── VisualizarCarsController.js 
+|   ├── Models/ 
+|   │   │ └── ProfileModel.js 
+|   │   │ └── RegisterCarModel.js 
+|   │   │ └── ResetPasswordModel.js 
+|   │   │ └── UserModel.js 
+|   │   │ └── VisualizarCarsModel.js 
 │   │   ├── login.js 
 │   │   ├── profile.js 
 │   │   ├── register.js 
