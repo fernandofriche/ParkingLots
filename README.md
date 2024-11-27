@@ -24,65 +24,59 @@ CSS3
 React 
 JavaScript
 Organização das Pastas
-parkinglots/ 
+parkinglots/
 ├── public/
 ├── src/ 
 │   ├── BackEnd/
 │   │   └── Controllers/
-│   │   │ └── LoginController.js 
-│   │   │ └── ProfileController.js 
-│   │   │ └── RegisterCarController.js 
-│   │   │ └── RegisterController.js 
-│   │   │ └── ResetPasswordController.js 
-│   │   │ └── VisualizarCarsController.js 
+│   │       ├── LoginController.js 
+│   │       ├── ProfileController.js 
+│   │       ├── RegisterCarController.js 
+│   │       ├── RegisterController.js 
+│   │       ├── ResetPasswordController.js 
+│   │       ├── VisualizarCarsController.js 
 │   ├── Models/ 
-│   │   │ └── ProfileModel.js 
-│   │   │ └── RegisterCarModel.js 
-│   │   │ └── ResetPasswordModel.js 
-│   │   │ └── UserModel.js 
-│   │   │ └── VisualizarCarsModel.js 
-│   │   ├── login.js 
-│   │   ├── profile.js 
-│   │   ├── register.js 
-│   │   ├── registerCar.js 
-│   │   ├── resetPassword.js 
-│   │   ├── visualizarCars.js 
+│   │   ├── ProfileModel.js 
+│   │   ├── RegisterCarModel.js 
+│   │   ├── ResetPasswordModel.js 
+│   │   ├── UserModel.js 
+│   │   ├── VisualizarCarsModel.js 
 │   ├── Pages/
-│   │   └── Detalhes/
-│   │   │ └── Detalhes.jsx
-│   │   │ └── Detalhes.module.css
-│   │   └── FeedBack/
-│   │   │ └── FeedBack.jsx
-│   │   │ └── FeedBack.module.css
-│   │   └── HomePage/
-│   │   │ └── HomePage.jsx
-│   │   │ └── HomePage.module.css
-│   │   └── Login/
-│   │   │ └── Login.jsx
-│   │   │ └── Login.module.css
-│   │   └── Parceiros/
-│   │   │ └── Detalhes.jsx
-│   │   │ └── Detalhes.module.css
-│   │   └── Profile/
-│   │   │ └── Profile.jsx
-│   │   │ └── Profile.module.css
-│   │   └── Register/
-│   │   │ └── Register.jsx
-│   │   │ └── Register.module.css
-│   │   └── RegisterCar/
-│   │   │ └── RegisterCar.jsx
-│   │   │ └── RegisterCar.module.css
-│   │   └── Reservas/
-│   │   │ └── Reservas.jsx
-│   │   │ └── Reservas.module.css
-│   │   └── ResetPassword/
-│   │   │ └── ResetPassword.jsx
-│   │   │ └── ResetPassword.module.css
-│   │   └── RotasPrivadas/
-│   │   │ └── RotasPrivadas.jsx
-│   │   └── UsuarioNaoAutorizado/
-│   │   │ └── UsuarioNaoAutorizado.jsx
-│   │   │ └── UsuarioNaoAutorizado.module.css
+│   │   ├── Detalhes/
+│   │   │   ├── Detalhes.jsx
+│   │   │   ├── Detalhes.module.css
+│   │   ├── FeedBack/
+│   │   │   ├── FeedBack.jsx
+│   │   │   ├── FeedBack.module.css
+│   │   ├── HomePage/
+│   │   │   ├── HomePage.jsx
+│   │   │   ├── HomePage.module.css
+│   │   ├── Login/
+│   │   │   ├── Login.jsx
+│   │   │   ├── Login.module.css
+│   │   ├── Parceiros/
+│   │   │   ├── Detalhes.jsx
+│   │   │   ├── Detalhes.module.css
+│   │   ├── Profile/
+│   │   │   ├── Profile.jsx
+│   │   │   ├── Profile.module.css
+│   │   ├── Register/
+│   │   │   ├── Register.jsx
+│   │   │   ├── Register.module.css
+│   │   ├── RegisterCar/
+│   │   │   ├── RegisterCar.jsx
+│   │   │   ├── RegisterCar.module.css
+│   │   ├── Reservas/
+│   │   │   ├── Reservas.jsx
+│   │   │   ├── Reservas.module.css
+│   │   ├── ResetPassword/
+│   │   │   ├── ResetPassword.jsx
+│   │   │   ├── ResetPassword.module.css
+│   │   ├── RotasPrivadas/
+│   │   │   ├── RotasPrivadas.jsx
+│   │   ├── UsuarioNaoAutorizado/
+│   │   │   ├── UsuarioNaoAutorizado.jsx
+│   │   │   ├── UsuarioNaoAutorizado.module.css
 │   ├── Routes/
 │   │   ├── Routes.jsx
 │   ├── Services/
@@ -92,6 +86,7 @@ parkinglots/
 │   ├── index.css
 │   ├── main.jsx
 └── package.json
+
 
 
 
